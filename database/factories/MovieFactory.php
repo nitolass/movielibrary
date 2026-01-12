@@ -2,19 +2,22 @@
 
 namespace Database\Factories;
 
-use App\Models\Movie;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class MovieFactory extends Factory
 {
-    protected $model = Movie::class;
+    protected $model = \App\Models\Movie::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'title' => $this->faker->sentence(3),
+            'year' => $this->faker->year,
+            'description' => $this->faker->paragraph,
+            'duration' => $this->faker->numberBetween(80, 180),
+            'age_rating' => $this->faker->numberBetween(0, 18),
+            'country' => $this->faker->country,
+            'poster' => 'default-poster.jpg',
         ];
     }
 }

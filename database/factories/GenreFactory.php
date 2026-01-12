@@ -13,8 +13,8 @@ class GenreFactory extends Factory
     public function definition()
     {
         return [
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'name' => $this->faker->word(),
+            'description' => $this->faker->sentence(),
         ];
     }
 }
