@@ -15,8 +15,8 @@ class DirectorRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'bio' => 'nullable|string',
-            'birth_year' => 'nullable|digits:4|integer',
+            'biography' => 'nullable|string',
+            'birth_year' => 'nullable|integer|min:1800|max:'.date('Y'),
             'nationality' => 'nullable|string|max:255',
             'photo' => 'nullable|image|max:2048',
         ];

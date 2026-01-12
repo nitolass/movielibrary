@@ -11,15 +11,15 @@ class Director extends Model
 
     protected $fillable = [
         'name',
-        'bio',
+        'biography',
         'birth_year',
         'nationality',
         'photo',
     ];
 
-    // Relación N:M con películas
+    // Relación 1:N (Un director dirige muchas películas)
     public function movies()
     {
-        return $this->belongsToMany(Movie::class);
+        return $this->hasMany(Movie::class);
     }
 }

@@ -1,258 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'MovieHub') }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Fondo oscuro de toda la página */
-        .background-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            z-index: -1;
-        }
+@extends('layouts.app')
 
-        .background-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(40%);
-        }
+@section('title', 'Bienvenido - MovieHub')
 
-        /* Botón Movies más visible */
-        .btn-movies {
-            cursor: pointer;
-            gap: 0.5rem;
-            border: none;
-            transition: all 0.3s ease-in-out;
-            border-radius: 100px;
-            font-weight: 800;
-            padding: 0.85rem 1.5rem;
-            font-size: 0.925rem;
-            line-height: 1rem;
-            background-color: rgba(0, 0, 0, 0.7); /* más oscuro para resaltar */
-            box-shadow:
-                0 4px 10px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
+@section('content')
+    <div class="relative w-full min-h-screen bg-[#0f1115] text-white overflow-hidden font-['Outfit'] selection:bg-yellow-400 selection:text-black flex flex-col justify-center items-center" x-data="{ loaded: false }" x-init="setTimeout(() => loaded = true, 100)">
 
-        .btn-movies:hover {
-            box-shadow:
-                0 6px 14px rgba(0, 0, 0, 0.6),
-                inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
-                inset 0 0 0 1px rgba(252, 232, 3, 0.08);
-            color: #fce803;
-            transform: translateY(-0.25rem);
-            background-color: rgba(0, 0, 0, 0.8);
-        }
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-yellow-500/10 rounded-full blur-[128px]"></div>
+            <div class="absolute -bottom-24 -left-24 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[128px]"></div>
+        </div>
 
-        /* MovieHub siempre animado (igual que hover) */
-        .logo-title {
-            font-size: 3rem;
-            font-weight: 900;
-            color: #fce803; /* amarillo */
-            transform: scale(1.1) rotate(-2deg); /* igual que el hover */
-            display: inline-block;
-        }
+        <div class="relative z-10 flex flex-col justify-center items-center text-center px-4 md:px-6 max-w-4xl mx-auto">
 
-        /* Botón azul de inicio de sesión con SVG */
-        .user-profile {
-            cursor: pointer;
-            transition: 0.3s ease;
-            background: linear-gradient(
-                to bottom right,
-                #fdcb00 0%,
-                rgba(46, 142, 255, 0) 30%
-            );
-            background-color: rgb(131, 108, 12);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 15px;
-            padding: 2px;
-            text-decoration: none;
-        }
+            <div class="mb-10 text-4xl md:text-5xl font-black tracking-tighter transition-all duration-700 opacity-0 -translate-y-4" :class="loaded ? 'translate-y-0 opacity-100' : ''">
+                MovieHub<span class="text-yellow-400">.</span>
+            </div>
 
-        .user-profile:hover,
-        .user-profile:focus {
-            background-color: rgb(253, 203, 0);
-            box-shadow: 0 0 10px rgba(136, 119, 1, 0.98);
-            outline: none;
-        }
+            <div class="mb-8 inline-block transition-all duration-700 delay-100 opacity-0 translate-y-4" :class="loaded ? 'translate-y-0 opacity-100' : ''">
+            <span class="px-4 py-1.5 rounded-full border border-yellow-400/30 bg-yellow-400/10 text-yellow-400 text-xs font-bold uppercase tracking-widest shadow-[0_0_15px_rgba(250,204,21,0.2)] backdrop-blur-md">
+                La experiencia definitiva
+            </span>
+            </div>
 
-        .user-profile-inner {
-            height: 47px;
-            border-radius: 13px;
-            background-color: #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: #fff;
-            font-weight: 600;
-            white-space: nowrap;
-            padding: 0 12px;
-        }
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight tracking-tight transition-all duration-700 delay-200 opacity-0 translate-y-4" :class="loaded ? 'translate-y-0 opacity-100' : ''">
+                Descubre, opina y <br class="hidden md:block" />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-200 to-amber-500 drop-shadow-lg">
+                colecciona cine.
+            </span>
+            </h1>
 
-        .user-profile-inner svg {
-            width: 27px;
-            height: 27px;
-            fill: #fff;
-        }
+            <p class="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed transition-all duration-700 delay-300 opacity-0 translate-y-4" :class="loaded ? 'translate-y-0 opacity-100' : ''">
+                Tu biblioteca personal de películas. Sin distracciones, solo cine.
+            </p>
 
-        /* Botón morado de registro sin SVG */
-        .user-profile-purple {
-            cursor: pointer;
-            transition: 0.3s ease;
-            background: linear-gradient(
-                to bottom right,
-                #f2f2f6 0%,
-                rgba(168, 85, 247, 0) 30%
-            );
-            background-color: rgba(251, 249, 251, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 15px;
-            padding: 2px;
-            text-decoration: none;
-        }
+            <div class="flex flex-col sm:flex-row items-center gap-6 transition-all duration-700 delay-400 opacity-0 translate-y-4" :class="loaded ? 'translate-y-0 opacity-100' : ''">
 
-        .user-profile-purple:hover,
-        .user-profile-purple:focus {
-            background-color: rgba(255, 255, 255, 0.7);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            outline: none;
-        }
-
-        .user-profile-purple-inner {
-            height: 47px;
-            border-radius: 13px;
-            background-color: #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 600;
-            white-space: nowrap;
-            padding: 0 12px;
-        }
-        /* Botón rojo elegante (Cerrar sesión) */
-        .logout-button {
-            cursor: pointer;
-            transition: 0.3s ease;
-            background: linear-gradient(
-                to bottom right,
-                #ff3b3b 0%,
-                rgba(255, 59, 59, 0) 30%
-            );
-            background-color: rgba(255, 59, 59, 0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 15px;
-            padding: 2px;
-            text-decoration: none;
-            border: none;
-        }
-
-        .logout-button:hover,
-        .logout-button:focus {
-            background-color: rgba(255, 59, 59, 0.7);
-            box-shadow: 0 0 10px rgba(255, 59, 59, 0.5);
-            outline: none;
-        }
-
-        .logout-button-inner {
-            height: 47px;
-            border-radius: 13px;
-            background-color: #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 600;
-            white-space: nowrap;
-            padding: 0 16px;
-        }
-
-    </style>
-</head>
-<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
-
-<!-- Fondo de imagen oscuro -->
-<div class="background-image">
-    <img src="{{ asset('images/muchaspeliculas.jpg') }}" alt="Fondo">
-</div>
-
-<!-- Header -->
-<header class="flex justify-between items-center px-8 py-4 bg-transparent">
-    <div class="logo-title">
-        {{ config('app.name', 'MovieHub') }}
-    </div>
-
-    <div class="space-x-4 flex items-center">
-        @guest
-            <a href="{{ route('login') }}" class="user-profile">
-                <div class="user-profile-inner">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                <a href="{{ route('movies.index') }}" class="group relative px-10 py-5 bg-yellow-400 text-black font-black text-lg rounded-full shadow-[0_0_20px_rgba(250,204,21,0.4)] hover:shadow-[0_0_50px_rgba(250,204,21,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-3 overflow-hidden">
+                    <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out"></span>
+                    <span class="relative">Explorar Catálogo</span>
+                    <svg class="w-5 h-5 relative group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    Iniciar Sesión
-                </div>
-            </a>
+                </a>
 
-            <a href="{{ route('register') }}" class="user-profile-purple">
-                <div class="user-profile-purple-inner">
-                    Registrarse
-                </div>
-            </a>
-        @else
-            <span class="px-4 py-2">Hola, {{ auth()->user()->name }}</span>
-            <form method="POST" action="{{ route('logout') }}" class="inline">
-                @csrf
-                <button type="submit" class="logout-button">
-                    <div class="logout-button-inner">
-                        Cerrar sesión
+                @guest
+                    <div class="flex items-center gap-6 text-sm font-bold">
+                        <a href="{{ route('register') }}" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2 group">
+                            Crear cuenta
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                        </a>
+                        <span class="text-gray-700">|</span>
+                        <a href="{{ route('login') }}" class="text-gray-400 hover:text-yellow-400 transition-colors">
+                            Ya tengo cuenta
+                        </a>
                     </div>
-                </button>
-            </form>
-        @endguest
+                @endguest
+            </div>
+
+        </div>
+
+        <div class="absolute bottom-6 w-full text-center text-gray-700 text-[10px] uppercase tracking-widest transition-all duration-1000 delay-700 opacity-0" :class="loaded ? 'opacity-100' : ''">
+            &copy; {{ date('Y') }} MovieHub Inc.
+        </div>
+
     </div>
-</header>
-
-<!-- Contenido central -->
-<main class="flex-1 flex flex-col justify-center items-center text-center px-4">
-
-    <h1 class="text-5xl font-bold mb-4">Bienvenido a {{ config('app.name') }}</h1>
-    <p class="text-lg max-w-2xl mb-6">
-        Explora tu catálogo de películas favorito.
-        Consulta reseñas, descubre nuevos géneros y guarda tus favoritos.
-    </p>
-
-    <!-- Botón Movies centrado -->
-    <div class="flex justify-center items-center mt-6">
-         <a href="" class=""/> <!-- Aqui meteremos la ruta para que te lleve a la vista de peliculas -->
-        <button class="btn-movies">Ver Películas</button>
-    </div>
-
-</main>
-
-<!-- Footer opcional -->
-<footer class="text-gray-400 text-sm py-4 text-center bg-transparent">
-    &copy; {{ date('Y') }} {{ config('app.name', 'MovieHub') }}. Todos los derechos reservados.
-</footer>
-
-</body>
-</html>
+@endsection
