@@ -70,24 +70,22 @@
                     </div>
                 </a>
 
-                <div class="relative p-1 rounded-3xl bg-white/5 border border-dashed border-white/10 opacity-70 group cursor-not-allowed">
-                    <div class="relative h-full p-8 bg-[#0f1115]/50 rounded-[22px] flex flex-col items-start overflow-hidden backdrop-blur-sm">
+                <a href="#" class="group relative p-1 rounded-3xl bg-gradient-to-b from-white/10 to-white/5 hover:from-red-400/50 hover:to-red-600/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(248,113,113,0.2)]">
+                    <div class="relative h-full p-8 bg-[#0f1115] rounded-[22px] flex flex-col items-start overflow-hidden">
 
-                        <div class="absolute top-4 right-4 bg-gray-800 text-gray-400 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide border border-white/5">
-                            Próximamente
-                        </div>
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-red-500/20 transition-colors"></div>
 
-                        <div class="w-14 h-14 bg-gray-800 rounded-2xl flex items-center justify-center mb-6 text-gray-500">
+                        <div class="w-14 h-14 bg-red-500 rounded-2xl flex items-center justify-center mb-6 text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
                         </div>
-                        <h4 class="text-2xl font-black text-gray-500 mb-2">Favoritos</h4>
-                        <p class="text-gray-600 text-sm leading-relaxed">
-                            Estamos construyendo tu lista de seguimiento. Pronto podrás guardar aquí tus películas pendientes.
+                        <h4 class="text-2xl font-black text-white mb-2 group-hover:text-red-400 transition-colors">Favoritos</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Accede rápidamente a tu lista de películas guardadas. Tus imprescindibles, en un solo lugar.
                         </p>
                     </div>
-                </div>
+                </a>
 
             </div>
 
