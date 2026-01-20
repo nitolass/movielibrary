@@ -17,7 +17,7 @@ class Director extends Model
         'photo',
     ];
 
-    // Relación 1:N (Un director dirige muchas películas)
+    // Relación 1:N
     public function movies()
     {
         return $this->hasMany(Movie::class);

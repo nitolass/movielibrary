@@ -9,14 +9,17 @@ return new class extends Migration {
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('genre_id')->constrained();
             $table->string('title');
-            $table->string('description');
-            $table->string('year');
+            $table->foreignId('director_id')->constrained('directors')
+                ->onDelete('cascade');
+
+
+            $table->text('description');
+            $table->string('year', 4);
             $table->integer('duration')->comment('duration in minutes');
             $table->integer('age_rating');
             $table->string('country');
-            $table->string('poster');
+            $table->string('poster')->nullable();
             $table->timestamps();
         });
     }

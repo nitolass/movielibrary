@@ -26,6 +26,7 @@ class UserStoreRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users,email'],
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
+            'role_id' => ['required', 'exists:roles,id'],
         ];
     }
 }

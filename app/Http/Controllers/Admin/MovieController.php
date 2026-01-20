@@ -30,18 +30,18 @@ class MovieController extends Controller
 
     public function store(MovieRequest $request)
     {
+        // validamos
         $data = $request->validated();
 
-        // Subida de poster
         if ($request->hasFile('poster')) {
             $data['poster'] = $request->file('poster')->store('posters', 'public');
         }
 
+        // creamos la pelicula.
         $movie = Movie::create($data);
 
-        // Guardar relaciones N:M
+        // sincronizamos generos
         $movie->genres()->sync($request->input('genres', []));
-        $movie->directors()->sync($request->input('directors', []));
         $movie->actors()->sync($request->input('actors', []));
 
         return redirect()->route('movies.index')->with('success', 'Película creada correctamente.');
@@ -59,30 +59,31 @@ class MovieController extends Controller
         $directors = Director::all();
         $actors = Actor::all();
         $movie->load(['genres', 'directors', 'actors']);
-        return view('admin.movies.edit', compact('movie', 'genres', 'directors', 'actors'));
+        return view('admin.movies.edit',
+            compact('movie', 'genres', 'directors', 'actors'));
     }
 
     public function update(MovieRequest $request, Movie $movie)
     {
         $data = $request->validated();
 
-        // Subida de poster
         if ($request->hasFile('poster')) {
-            // Eliminar poster viejo si existe
             if ($movie->poster) {
                 Storage::disk('public')->delete($movie->poster);
             }
             $data['poster'] = $request->file('poster')->store('posters', 'public');
         }
 
+        // si cambio el director_id se actualiza
         $movie->update($data);
 
-        // Actualizar relaciones N:M
+        // Sincronizamos generos y actores
+
         $movie->genres()->sync($request->input('genres', []));
-        $movie->directors()->sync($request->input('directors', []));
         $movie->actors()->sync($request->input('actors', []));
 
-        return redirect()->route('movies.index')->with('success', 'Película actualizada correctamente.');
+        return redirect()->route('movies.index')
+            ->with('success', 'Película actualizada correctamente.');
     }
 
     public function destroy(Movie $movie)

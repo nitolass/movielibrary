@@ -1,8 +1,11 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-test('profile page is displayed', function () {
+uses(RefreshDatabase::class);
+
+it('profile page is displayed', function () {
     $user = User::factory()->create();
 
     $response = $this
@@ -12,34 +15,37 @@ test('profile page is displayed', function () {
     $response->assertOk();
 });
 
-test('profile information can be updated', function () {
+it('profile information can be updated', function () {
     $user = User::factory()->create();
 
     $response = $this
         ->actingAs($user)
         ->patch('/profile', [
             'name' => 'Test User',
+            'surname' => 'Apellido Test',
             'email' => 'test@example.com',
         ]);
+
+    // Añade esto temporalmente para ver por qué se queja Laravel
 
     $response
         ->assertSessionHasNoErrors()
         ->assertRedirect('/profile');
 
     $user->refresh();
-
     $this->assertSame('Test User', $user->name);
     $this->assertSame('test@example.com', $user->email);
     $this->assertNull($user->email_verified_at);
 });
 
-test('email verification status is unchanged when the email address is unchanged', function () {
+it('email verification status is unchanged when the email address is unchanged', function () {
     $user = User::factory()->create();
 
     $response = $this
         ->actingAs($user)
         ->patch('/profile', [
             'name' => 'Test User',
+            'surname' => $user->surname,
             'email' => $user->email,
         ]);
 
@@ -50,7 +56,7 @@ test('email verification status is unchanged when the email address is unchanged
     $this->assertNotNull($user->refresh()->email_verified_at);
 });
 
-test('user can delete their account', function () {
+it('user can delete their account', function () {
     $user = User::factory()->create();
 
     $response = $this
@@ -67,7 +73,7 @@ test('user can delete their account', function () {
     $this->assertNull($user->fresh());
 });
 
-test('correct password must be provided to delete account', function () {
+it('correct password must be provided to delete account', function () {
     $user = User::factory()->create();
 
     $response = $this

@@ -16,22 +16,20 @@ class Movie extends Model
         'duration',
         'age_rating',
         'country',
-        'poster'
+        'poster',
+        'director_id'
     ];
 
-    // Relación N:M con géneros
+    public function director()
+    {
+        return $this->belongsTo(Director::class);
+    }
+
     public function genres()
     {
         return $this->belongsToMany(Genre::class);
     }
 
-    // Relación N:M con directores
-    public function directors()
-    {
-        return $this->belongsToMany(Director::class);
-    }
-
-    // Relación N:M con actores
     public function actors()
     {
         return $this->belongsToMany(Actor::class);

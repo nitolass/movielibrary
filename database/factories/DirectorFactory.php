@@ -12,10 +12,10 @@ class DirectorFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'bio' => $this->faker->paragraph(),
+            'biography' => $this->faker->paragraph(),
             'birth_year' => $this->faker->year(),
             'nationality' => $this->faker->country(),
-            'photo' => 'directors/' . $this->faker->image('public/storage/directors',400,300,null,false),
+            'photo' => null,
         ];
     }
 }

@@ -36,6 +36,19 @@
                 </div>
 
                 <div>
+                    <label for="surname" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Apellido</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-yellow-400 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0c0 .884-.956 2.5-1 2.5H15c-.044 0-1-1.616-1-2.5" />
+                            </svg>
+                        </div>
+                        <input id="surname" type="text" name="surname" :value="old('surname')" required autocomplete="family-name" placeholder="Tu Apellido"
+                               class="block w-full pl-12 pr-4 py-3 bg-[#0f1115] border border-gray-700 text-gray-100 rounded-xl focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 focus:outline-none transition-all placeholder-gray-600 shadow-inner sm:text-sm">
+                    </div>
+                    <x-input-error :messages="$errors->get('surname')" class="mt-2 text-red-400 text-xs font-bold" />
+                </div>
+                <div>
                     <label for="email" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Correo Electrónico</label>
                     <div class="relative group">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-yellow-400 transition-colors">

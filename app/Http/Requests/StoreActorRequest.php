@@ -11,7 +11,7 @@ class StoreActorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,7 @@ class StoreActorRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'bio' => 'nullable|string',
+            'biography' => 'nullable|string',
             'birth_year' => 'nullable|digits:4|integer',
             'nationality' => 'nullable|string|max:255',
             'photo' => 'nullable|image|max:2048',

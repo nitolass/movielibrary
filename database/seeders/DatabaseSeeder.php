@@ -10,6 +10,7 @@ use App\Models\Actor;
 use App\Models\Movie;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,37 +21,46 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear roles
-        $admin_role = Role::create(['name' => 'admin']);
-        $user_role = Role::create(['name' => 'user']);
+        // Crear Roles
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $userRole = Role::firstOrCreate(['name' => 'user']);
 
         // Crear usuario administrador
         User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'),
-            'role_id' => $admin_role->id,
+            'name' => 'Admin',
+            'surname' => 'Principal', // <--- FALTABA ESTO
+            'email' => 'admin@moviehub.com', // He puesto este mail para coincidir con lo que te dije antes
+            'password' => Hash::make('12345678'),
+            'role_id' => $adminRole->id,
         ]);
 
-        // generos
-        $genres = Genre::factory(5)->create();
+        //  Crear usuario normal para pruebas
+        User::create([
+            'name' => 'Juan',
+            'surname' => 'Pérez',
+            'email' => 'juan@correo.com',
+            'password' => Hash::make('12345678'),
+            'role_id' => $userRole->id,
+        ]);
 
-        // directores
-        $directors = Director::factory(5)->create();
+        // 4. Crear datos base
+        $genres = Genre::factory(10)->create();
+        $directors = Director::factory(10)->create();
+        $actors = Actor::factory(20)->create();
 
-        // actores
-        $actors = Actor::factory(10)->create();
+        //  Crear Películas y Relaciones
+        Movie::factory(15)->create(function () use ($directors) {
+            return ['director_id' => $directors->random()->id];
+        })->each(function($movie) use ($genres, $actors) {
 
-        // peliculas n:m
-        $movies = Movie::factory(10)->create()->each(function($movie) use ($genres, $directors, $actors) {
-            // relacion generos randoms
-            $movie->genres()->attach($genres->random(rand(1,3))->pluck('id')->toArray());
+            // Relación N:M con Géneros
+            // recibe ids y los saca con pluck
+            $movie->genres()->attach($genres->random(rand(1, 3))->pluck('id'));
 
-            // relacion directores randoms
-            $movie->directors()->attach($directors->random(rand(1,2))->pluck('id')->toArray());
+            // Relación N:M con Actores
+            $movie->actors()->attach($actors->random(rand(2, 5))->pluck('id'));
 
-            // relacion actores randoms
-            $movie->actors()->attach($actors->random(rand(2,5))->pluck('id')->toArray());
+
         });
     }
 }
