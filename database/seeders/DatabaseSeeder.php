@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => $userRole->id,
         ]);
 
-        // 4. Crear datos base
+        //  Crear datos base
         $genres = Genre::factory(10)->create();
         $directors = Director::factory(10)->create();
         $actors = Actor::factory(20)->create();
@@ -61,6 +61,23 @@ class DatabaseSeeder extends Seeder
             $movie->actors()->attach($actors->random(rand(2, 5))->pluck('id'));
 
 
+        });
+        //  Crear Películas y Relaciones
+        Movie::factory(15)->create(function () use ($directors) {
+            return ['director_id' => $directors->random()->id];
+        })->each(function($movie) use ($genres, $actors) {
+
+            $movie->genres()->attach($genres->random(rand(1, 3))->pluck('id'));
+
+            // REQUISITO 17: Rellenar la columna extra desde código
+            // Seleccionamos actores al azar
+            $randomActors = $actors->random(rand(2, 5));
+
+            foreach ($randomActors as $actor) {
+                $movie->actors()->attach($actor->id, [
+                    'character_name' => fake()->name() // Nombre del personaje falso
+                ]);
+            }
         });
     }
 }

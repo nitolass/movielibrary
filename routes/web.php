@@ -2,6 +2,7 @@
 
 use App\Admin\Users\Controllers\ProfileController;
 use App\Admin\Users\Controllers\UserController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ActorController;
 use App\Http\Controllers\Admin\DirectorController;
 use App\Http\Controllers\Admin\GenreController;
@@ -20,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
 
     // Crud de perfil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

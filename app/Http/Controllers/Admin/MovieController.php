@@ -16,7 +16,7 @@ class MovieController extends Controller
 
     public function index()
     {
-        $movies = Movie::with(['genres', 'directors', 'actors'])->get();
+        $movies = Movie::with(['genres', 'director', 'actors'])->get();
         return view('admin.movies.index', compact('movies'));
     }
 
@@ -49,7 +49,7 @@ class MovieController extends Controller
 
     public function show(Movie $movie)
     {
-        $movie->load(['genres', 'directors', 'actors']);
+        $movie->load(['genres', 'director', 'actors']);
         return view('admin.movies.show', compact('movie'));
     }
 
@@ -58,7 +58,7 @@ class MovieController extends Controller
         $genres = Genre::all();
         $directors = Director::all();
         $actors = Actor::all();
-        $movie->load(['genres', 'directors', 'actors']);
+        $movie->load(['genres', 'director', 'actors']);
         return view('admin.movies.edit',
             compact('movie', 'genres', 'directors', 'actors'));
     }
