@@ -36,7 +36,7 @@
 
             <div class="flex flex-col sm:flex-row items-center gap-6 transition-all duration-700 delay-400 opacity-0 translate-y-4" :class="loaded ? 'translate-y-0 opacity-100' : ''">
 
-                <a href="{{ route('movies.index') }}" class="group relative px-10 py-5 bg-yellow-400 text-black font-black text-lg rounded-full shadow-[0_0_20px_rgba(250,204,21,0.4)] hover:shadow-[0_0_50px_rgba(250,204,21,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-3 overflow-hidden">
+                <a href="{{ route('user.movies.index') }}" class="group relative px-10 py-5 bg-yellow-400 text-black font-black text-lg rounded-full shadow-[0_0_20px_rgba(250,204,21,0.4)] hover:shadow-[0_0_50px_rgba(250,204,21,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-3 overflow-hidden">
                     <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out"></span>
                     <span class="relative">Explorar Catálogo</span>
                     <svg class="w-5 h-5 relative group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -36,9 +36,22 @@
 </head>
 <body class="bg-[#16181c] text-gray-100 min-h-screen antialiased" x-data="{ sidebarOpen: false }">
 
+{{--
+    AQUÍ ESTÁ EL CAMBIO CLAVE:
+    El sidebar se elige dinámicamente según quién esté conectado.
+--}}
 <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
      class="fixed inset-y-0 left-0 z-50 w-64 transition-transform duration-300 md:translate-x-0 bg-[#0f1115] border-r border-white/5">
-    @include('layouts.sidebar_admin')
+
+    @if(Auth::user()->email === 'juan@admin.es' || (Auth::user()->role && Auth::user()->role->name === 'admin'))
+        {{-- Si es Juan, cargamos el sidebar de ADMIN --}}
+        @include('layouts.sidebar_admin')
+    @else
+        {{-- Si es Pepe, cargamos el sidebar de CLIENTE --}}
+        {{-- Asegúrate de que este archivo existe en: resources/views/layouts/navigation/sidebar-client.blade.php --}}
+        @include('layouts.sidebar_client')
+    @endif
+
 </div>
 
 <div x-show="sidebarOpen" @click="sidebarOpen = false"

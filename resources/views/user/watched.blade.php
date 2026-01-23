@@ -12,7 +12,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 @foreach($movies as $movie)
                     <div class="bg-[#16181c] rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 shadow-lg group grayscale hover:grayscale-0">
-                        <a href="{{ route('public.movies.show', $movie->id) }}">
+                        <a href="{{ route('', $movie->id) }}">
                             <div class="relative aspect-[2/3]">
                                 @if($movie->poster)
                                     <img src="{{ asset('storage/' . $movie->poster) }}" class="w-full h-full object-cover">
@@ -37,7 +37,7 @@
         @else
             <div class="flex flex-col items-center justify-center h-64 border-2 border-dashed border-gray-700 rounded-xl bg-white/5">
                 <p class="text-gray-400 text-lg mb-2">Tu historial está vacío.</p>
-                <a href="{{ route('public.movies.index') }}" class="text-yellow-400 hover:text-yellow-300 font-bold text-sm">Empezar a ver &rarr;</a>
+                <a href="{{ route('') }}" class="text-yellow-400 hover:text-yellow-300 font-bold text-sm">Empezar a ver &rarr;</a>
             </div>
         @endif
     </div>
