@@ -1,7 +1,7 @@
 <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0f1115] border-r border-white/5 flex flex-col transition-transform duration-300 transform -translate-x-full md:translate-x-0">
 
     <div class="h-20 flex items-center px-8 border-b border-white/5">
-        <a href="{{ route('dashboard') }}" class="text-3xl font-black tracking-tighter text-white font-['Outfit']">
+        <a href="{{ route('admin.dashboard') }}" class="text-3xl font-black tracking-tighter text-white font-['Outfit']">
             MovieHub<span class="text-yellow-400">.</span>
         </a>
     </div>
@@ -10,7 +10,7 @@
 
         <p class="px-4 text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Menu Principal</p>
 
-        <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'bg-yellow-400 text-black font-bold shadow-[0_0_15px_rgba(250,204,21,0.4)]' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'bg-yellow-400 text-black font-bold shadow-[0_0_15px_rgba(250,204,21,0.4)]' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
@@ -42,7 +42,6 @@
                 <span>Géneros</span>
             </a>
 
-            {{-- Como no me pasaste la carpeta actores, asumo la ruta standard --}}
             <a href="{{ route('actors.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('actors.*') ? 'bg-yellow-400 text-black font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

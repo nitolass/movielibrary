@@ -2,57 +2,85 @@
 
 use App\Admin\Users\Controllers\ProfileController;
 use App\Admin\Users\Controllers\UserController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ActorController;
 use App\Http\Controllers\Admin\DirectorController;
 use App\Http\Controllers\Admin\GenreController;
 use App\Http\Controllers\Admin\MovieController;
+use App\Http\Controllers\PublicCatalogController; // Asegúrate de que este archivo existe
+use App\Http\Controllers\UserDashboardController; // Asegúrate de que este archivo existe
 use App\Http\Middleware\IsAdminUserMiddleware;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-
+// 1. RUTA PÚBLICA (Landing Page)
 Route::get('/', function () {
     return view('welcome');
 });
 
-
+// GRUPO GENERAL (Usuarios logueados)
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // -----------------------------------------------------------
+    // 2. ZONA USUARIO (PEPE)
+    // -----------------------------------------------------------
+
+    // ✅ DASHBOARD DE USUARIO (Ruta específica)
+    Route::get('/user/dashboard', function () {
+        return view('user.dashboard');
+    })->name('user.dashboard');
 
 
-    // Crud de perfil
+    // Catálogo y Ficha (Público/Cliente)
+    Route::controller(PublicCatalogController::class)->group(function () {
+        Route::get('/catalogo', 'catalogo')->name('user.movies.index');
+        Route::get('/pelicula/{movie}', 'show')->name('user.movies.show');
+        Route::get('/unete', 'prompt')->name('public.prompt');
+    });
+
+    // Biblioteca Personal
+    Route::controller(UserDashboardController::class)->group(function () {
+        Route::get('/mis-favoritos', 'favorites')->name('user.favorites');
+        Route::get('/ver-mas-tarde', 'watchLater')->name('user.watch_later');
+        Route::get('/puntuadas', 'rated')->name('user.rated');
+        Route::get('/historial', 'watched')->name('user.watched');
+    });
+
+    // Perfil (Común)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Crud de peliculas
-    Route::prefix('movies')->name('movies.')->group(function(){
-        Route::get('/', [MovieController::class, 'index'])->name('index');
-        Route::get('/{movie}', [MovieController::class, 'show'])->name('show');
-    });
 
-
+    // -----------------------------------------------------------
+    // 3. ZONA ADMIN (JUAN)
+    // -----------------------------------------------------------
     Route::middleware([IsAdminUserMiddleware::class])->group(function () {
-        // Crud de peliculas. (ADMIN)
+
+        // ✅ DASHBOARD DE ADMIN (Ruta específica)
+        Route::get('/admin/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('admin.dashboard');
+
+
+        // CRUD de Películas (Admin)
         Route::prefix('movies')->name('movies.')->group(function(){
+            Route::get('/', [MovieController::class, 'index'])->name('index');
             Route::get('/create', [MovieController::class, 'create'])->name('create');
             Route::post('/store', [MovieController::class, 'store'])->name('store');
             Route::get('/{movie}/edit', [MovieController::class, 'edit'])->name('edit');
             Route::put('/{movie}', [MovieController::class, 'update'])->name('update');
             Route::delete('/{movie}', [MovieController::class, 'destroy'])->name('destroy');
+            Route::get('/{movie}', [MovieController::class, 'show'])->name('show');
         });
 
-        // Crud de usuarios
+        // CRUD de Usuarios
         Route::prefix('users')->name('admin.users.')->group(function(){
             Route::get('/', [UserController::class, 'index'])->name('index');
             Route::get('/create', [UserController::class, 'create'])->name('create');
             Route::post('/store', [UserController::class, 'store'])->name('store');
         });
 
-        // Crud de generos
+        // CRUD de Géneros
         Route::prefix('admin/genres')->name('admin.genres.')->group(function () {
             Route::get('/', [GenreController::class, 'index'])->name('index');
             Route::get('/create', [GenreController::class, 'create'])->name('create');
@@ -62,7 +90,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('/{genre}', [GenreController::class, 'destroy'])->name('destroy');
         });
 
-        // Crud de directores
+        // CRUD de Directores
         Route::prefix('directors')->name('directors.')->group(function(){
             Route::get('/', [DirectorController::class, 'index'])->name('index');
             Route::get('/create', [DirectorController::class, 'create'])->name('create');
@@ -73,7 +101,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('/{director}', [DirectorController::class, 'destroy'])->name('destroy');
         });
 
-        // Crud de actores
+        // CRUD de Actores
         Route::prefix('actors')->name('actors.')->group(function(){
             Route::get('/', [ActorController::class, 'index'])->name('index');
             Route::get('/create', [ActorController::class, 'create'])->name('create');

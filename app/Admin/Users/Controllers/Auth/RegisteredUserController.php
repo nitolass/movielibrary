@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Admin\Users\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Admin\Controller;
+use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role; // Importamos el modelo Role
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -36,18 +37,34 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // 1. Crear Usuario
         $user = User::create([
             'name' => $request->name,
-            'surname' => $request->surname, // <--- 2. GUARDA EL CAMPO
+            'surname' => $request->surname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-
         ]);
+
+        // 2. Asignar Rol (Si es Juan -> Admin, si no -> User)
+        $nombreRol = ($request->email === 'juan@admin.es') ? 'admin' : 'user';
+        $rol = Role::where('name', $nombreRol)->first();
+
+        if ($rol) {
+            $user->role_id = $rol->id;
+            $user->save();
+        }
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // 3. Redirigir
+        // Si por casualidad se registra Juan, lo mandamos al admin dashboard.
+        // Si es Pepe, al user dashboard.
+        if ($user->email === 'juan@admin.es') {
+            return redirect(route('admin.dashboard', absolute: false));
+        }
+
+        return redirect(route('user.dashboard', absolute: false));
     }
 }
