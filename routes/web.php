@@ -6,38 +6,42 @@ use App\Http\Controllers\Admin\ActorController;
 use App\Http\Controllers\Admin\DirectorController;
 use App\Http\Controllers\Admin\GenreController;
 use App\Http\Controllers\Admin\MovieController;
-use App\Http\Controllers\PublicCatalogController; // Asegúrate de que este archivo existe
-use App\Http\Controllers\UserDashboardController; // Asegúrate de que este archivo existe
+use App\Http\Controllers\Admin\PdfController;
+use App\Http\Controllers\PublicCatalogController;
+use App\Http\Controllers\UserDashboardController;
 use App\Http\Middleware\IsAdminUserMiddleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-// 1. RUTA PÚBLICA (Landing Page)
-Route::get('/', function () {
-    return view('welcome');
+// =========================================================================
+// RUTA PARA GENERAR PDFS (USUARIO NORMAL)
+// =========================================================================
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mis-peliculas/pdf', [PdfController::class, 'exportWatchLater'])->name('pdf.watchLater');
+    Route::get('/pelicula/{movie}/pdf', [PdfController::class, 'movieSheet'])->name('pdf.movieSheet');
 });
 
-// GRUPO GENERAL (Usuarios logueados)
+// =========================================================================
+// 1. ZONA PÚBLICA
+// =========================================================================
+
+Route::get('/', [PublicCatalogController::class, 'catalogo'])->name('home');
+Route::get('/catalogo', [PublicCatalogController::class, 'catalogo'])->name('user.movies.index');
+
+Route::controller(PublicCatalogController::class)->group(function () {
+    Route::get('/pelicula/{movie}', 'show')->name('user.movies.show');
+    Route::get('/unete', 'prompt')->name('public.prompt');
+});
+
+// =========================================================================
+// 2. ZONA PRIVADA
+// =========================================================================
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // -----------------------------------------------------------
-    // 2. ZONA USUARIO (PEPE)
-    // -----------------------------------------------------------
-
-    // ✅ DASHBOARD DE USUARIO (Ruta específica)
     Route::get('/user/dashboard', function () {
         return view('user.dashboard');
     })->name('user.dashboard');
 
-
-    // Catálogo y Ficha (Público/Cliente)
-    Route::controller(PublicCatalogController::class)->group(function () {
-        Route::get('/catalogo', 'catalogo')->name('user.movies.index');
-        Route::get('/pelicula/{movie}', 'show')->name('user.movies.show');
-        Route::get('/unete', 'prompt')->name('public.prompt');
-    });
-
-    // Biblioteca Personal
     Route::controller(UserDashboardController::class)->group(function () {
         Route::get('/mis-favoritos', 'favorites')->name('user.favorites');
         Route::get('/ver-mas-tarde', 'watchLater')->name('user.watch_later');
@@ -45,7 +49,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/historial', 'watched')->name('user.watched');
     });
 
-    // Perfil (Común)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -56,13 +59,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // -----------------------------------------------------------
     Route::middleware([IsAdminUserMiddleware::class])->group(function () {
 
-        // ✅ DASHBOARD DE ADMIN (Ruta específica)
         Route::get('/admin/dashboard', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
 
+        // =========================================================
+        // ✅ RUTAS PDF ADMIN
+        // =========================================================
+        Route::get('/admin/users/pdf', [PdfController::class, 'usersList'])
+            ->name('admin.pdf.users');
 
-        // CRUD de Películas (Admin)
+        Route::get('/admin/users/{user}/informe', [PdfController::class, 'userReport'])
+            ->name('admin.pdf.userReport');
+        // =========================================================
+
+        // CRUD de Películas
         Route::prefix('movies')->name('movies.')->group(function(){
             Route::get('/', [MovieController::class, 'index'])->name('index');
             Route::get('/create', [MovieController::class, 'create'])->name('create');
@@ -78,6 +89,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
             Route::get('/create', [UserController::class, 'create'])->name('create');
             Route::post('/store', [UserController::class, 'store'])->name('store');
+
+            // ✅ NUEVA RUTA SHOW (IMPRESCINDIBLE PARA VER DETALLES Y PDF COMPLEJO)
+            Route::get('/{user}', [UserController::class, 'show'])->name('show');
         });
 
         // CRUD de Géneros

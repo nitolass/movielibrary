@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Movie;
 
 class User extends Authenticatable
 {
@@ -49,11 +50,25 @@ class User extends Authenticatable
     }
 
     public function role(){
-        return $this->belongsTo(Role::class);
-    }
+        return $this->belongsTo(Role::class);    }
 
     public function isAdmin(){
         return $this->role && $this->role->name === 'admin';
+    }
+    public function watchLater()
+    {
+        return $this->belongsToMany(Movie::class, 'movie_user')
+            ->withPivot('type')
+            ->wherePivot('type', 'watch_later')
+            ->withTimestamps();
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Movie::class, 'movie_user')
+            ->withPivot('type')
+            ->wherePivot('type', 'favorite')
+            ->withTimestamps();
     }
 }
 

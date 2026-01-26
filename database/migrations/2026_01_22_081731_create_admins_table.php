@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         $rolAdmin = \App\Models\Role::create(['name' => 'admin']);
-        $rolUser  = \App\Models\Role::create(['name' => 'user']); 
+        $rolUser  = \App\Models\Role::create(['name' => 'user']);
+        $rolMantenimiento = \App\Models\Role::create(['name' => 'manteinance']);
 
         $usuario = \App\Models\User::create(['name'=>'admin',
             'email'=>'juan@admin.es',

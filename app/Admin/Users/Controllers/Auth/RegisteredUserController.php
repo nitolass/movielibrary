@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Admin\Users\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
 use App\Models\User;
 use App\Models\Role; // Importamos el modelo Role
 use Illuminate\Auth\Events\Registered;
@@ -65,6 +65,6 @@ class RegisteredUserController extends Controller
             return redirect(route('admin.dashboard', absolute: false));
         }
 
-        return redirect(route('user.dashboard', absolute: false));
+        return redirect(route('user.movies.index', absolute: false));
     }
 }

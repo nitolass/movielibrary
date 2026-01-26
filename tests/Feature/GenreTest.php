@@ -1,55 +1,80 @@
 <?php
 
+use App\Models\User;
+use App\Models\Role;
 use App\Models\Genre;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use function Pest\Laravel\{assertDatabaseHas, assertDatabaseMissing};
 
 uses(RefreshDatabase::class);
 
-it('puedo crear un género', function () {
-    // 1. Datos
-    $datos = [
-        'name' => 'Ciencia Ficción',
-        'description' => 'Películas sobre el futuro y tecnología.'
-    ];
+// Función auxiliar para crear un admin
+function createAdminForGenre() {
+    $role = Role::firstOrCreate(['name' => 'admin']);
+    return User::factory()->create(['role_id' => $role->id]);
+}
 
-    // 2. Acción
-    Genre::create($datos);
+test('admin can see genres list', function () {
+    $admin = createAdminForGenre();
+    Genre::factory()->count(3)->create();
 
-    // 3. Verificación
-    assertDatabaseHas('genres', [
+    $response = $this->actingAs($admin)->get(route('admin.genres.index'));
+
+    $response->assertStatus(200);
+    $response->assertViewHas('genres');
+});
+
+test('admin can see create genre form', function () {
+    $admin = createAdminForGenre();
+
+    $response = $this->actingAs($admin)->get(route('admin.genres.create'));
+
+    $response->assertStatus(200);
+});
+
+test('admin can create a genre', function () {
+    $admin = createAdminForGenre();
+
+    $response = $this->actingAs($admin)->post(route('admin.genres.store'), [
         'name' => 'Ciencia Ficción'
     ]);
+
+    $response->assertRedirect(route('admin.genres.index'));
+
+    // Verificamos base de datos
+    $this->assertDatabaseHas('genres', ['name' => 'Ciencia Ficción']);
 });
 
-it('puedo actualizar un género', function () {
-    $genre = Genre::create([
-        'name' => 'Terror',
-        'description' => 'Miedo'
+test('admin can see edit genre form', function () {
+    $admin = createAdminForGenre();
+    $genre = Genre::factory()->create();
+
+    $response = $this->actingAs($admin)->get(route('admin.genres.edit', $genre));
+
+    $response->assertStatus(200);
+});
+
+test('admin can update a genre', function () {
+    $admin = createAdminForGenre();
+    $genre = Genre::factory()->create();
+
+    $response = $this->actingAs($admin)->put(route('admin.genres.update', $genre), [
+        'name' => 'Terror Updated'
     ]);
 
-    $genre->update([
-        'name' => 'Horror',
-        'description' => 'Miedo intenso'
+    $response->assertRedirect(route('admin.genres.index'));
+
+    $this->assertDatabaseHas('genres', [
+        'id' => $genre->id,
+        'name' => 'Terror Updated'
     ]);
-
-    assertDatabaseHas('genres', ['name' => 'Horror']);
-    expect($genre->refresh()->description)->toBe('Miedo intenso');
 });
 
-it('puedo eliminar un género', function () {
-    $genre = Genre::create(['name' => 'Comedia']);
+test('admin can delete a genre', function () {
+    $admin = createAdminForGenre();
+    $genre = Genre::factory()->create();
 
-    $genre->delete();
+    $response = $this->actingAs($admin)->delete(route('admin.genres.destroy', $genre));
 
-    assertDatabaseMissing('genres', ['id' => $genre->id]);
-});
-
-// TEST EXTRA: Validación de unicidad (si tu migración lo pide)
-// Si no tienes 'unique' en la migración, este test no es necesario, pero es buena práctica.
-it('puedo crear géneros con nombres distintos', function () {
-    Genre::create(['name' => 'Acción']);
-    Genre::create(['name' => 'Drama']);
-
-    expect(Genre::count())->toBe(2);
+    $response->assertRedirect(route('admin.genres.index'));
+    $this->assertDatabaseMissing('genres', ['id' => $genre->id]);
 });

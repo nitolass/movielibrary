@@ -27,13 +27,34 @@ class UserController extends Controller
         return view('admin.users.create', compact('roles'));
     }
 
-    public function store(UserStoreRequest $request){
+    public function store(Request $request)
+    {
+        // 1. Validar
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', 'min:8'],
+            'role_id' => ['required', 'exists:roles,id'],
+        ]);
 
-        $input = $request->validated();
-        $input['password'] = bcrypt('defaultpassword');
+        // 2. Crear Usuario
+        User::create([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => $request->role_id,
+        ]);
 
-        User::create($input);
+        // 3. Redirigir
+        return redirect()->route('admin.users.index')
+            ->with('success', 'Usuario creado correctamente');
+    }
+    public function show(User $user)
+    {
+        $user->load('watchLater');
 
-        return redirect()->route('admin.users.create')->with('success', 'User created successfully.');
+        return view('admin.users.show', compact('user'));
     }
 }

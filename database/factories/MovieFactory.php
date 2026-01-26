@@ -17,8 +17,6 @@ class MovieFactory extends Factory
             'year' => $this->faker->year,
             'description' => $this->faker->paragraph,
             'duration' => $this->faker->numberBetween(80, 180),
-            'age_rating' => $this->faker->numberBetween(0, 18),
-            'country' => $this->faker->country,
             'poster' => null,
         ];
     }

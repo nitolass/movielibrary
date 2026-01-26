@@ -4,7 +4,7 @@
     <div class="container mx-auto px-4 py-8">
 
         {{-- Botón Volver --}}
-        <a href="{{ route('public.movies.index') }}" class="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors">
+        <a href="{{ route('user.movies.index') }}" class="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors">
             &larr; Volver al catálogo
         </a>
 
@@ -89,8 +89,7 @@
                         </button>
 
                         {{-- Si es ADMIN, mostrar botón de editar --}}
-                        @if(Auth::user()->role && Auth::user()->role->name === 'admin')
-                            <a href="{{ route('movies.edit', $movie) }}" class="ml-auto flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20">
+                        @if(Auth::user() && Auth::user()->role->name === 'admin')                            <a href="{{ route('movies.edit', $movie) }}" class="ml-auto flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>

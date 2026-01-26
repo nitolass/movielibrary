@@ -14,10 +14,9 @@ class Movie extends Model
         'year',
         'description',
         'duration',
-        'age_rating',
-        'country',
         'poster',
         'director_id'
+
     ];
 
     public function director()

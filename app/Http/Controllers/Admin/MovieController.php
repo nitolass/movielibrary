@@ -6,6 +6,7 @@ use App\Models\Movie;
 use App\Models\Genre;
 use App\Models\Director;
 use App\Models\Actor;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use App\Http\Requests\MovieRequest;
 use Illuminate\Support\Facades\Storage;
@@ -28,23 +29,30 @@ class MovieController extends Controller
         return view('admin.movies.create', compact('genres', 'directors', 'actors'));
     }
 
-    public function store(MovieRequest $request)
+    public function store(Request $request)
     {
-        // validamos
-        $data = $request->validated();
+        $validated = $request->validate([
+            'title'       => 'required|string|max:255',
+            'year' => 'required|integer|min:1900|max:' . (now()->year + 1),
+            'duration' => 'required|integer|min:1',
+            'director_id' => 'required|exists:directors,id',
+            'description' => 'required|string',
+            'poster'      => 'nullable|image|max:2048', // 2MB Max
+            'genres'      => 'required|array',
+            'genres.*'    => 'exists:genres,id',
+        ]);
 
         if ($request->hasFile('poster')) {
-            $data['poster'] = $request->file('poster')->store('posters', 'public');
+            $path = $request->file('poster')->store('posters', 'public');
+            $validated['poster'] = $path;
         }
 
-        // creamos la pelicula.
-        $movie = Movie::create($data);
+        $movie = \App\Models\Movie::create($validated);
 
-        // sincronizamos generos
-        $movie->genres()->sync($request->input('genres', []));
-        $movie->actors()->sync($request->input('actors', []));
+        $movie->genres()->sync($request->genres);
 
-        return redirect()->route('movies.index')->with('success', 'Película creada correctamente.');
+        return redirect()->route('movies.index')
+            ->with('success', '¡Película creada correctamente!');
     }
 
     public function show(Movie $movie)
@@ -88,6 +96,7 @@ class MovieController extends Controller
 
     public function destroy(Movie $movie)
     {
+        Gate::authorize('delete', $movie);
         if ($movie->poster) {
             Storage::disk('public')->delete($movie->poster);
         }

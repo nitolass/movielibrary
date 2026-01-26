@@ -21,20 +21,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear Roles
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $userRole = Role::firstOrCreate(['name' => 'user']);
+        $manteinanceRole = Role::firstOrCreate(['name' => 'manteinance']);
 
-        // Crear usuario administrador
         User::create([
             'name' => 'Admin',
-            'surname' => 'Principal', // <--- FALTABA ESTO
-            'email' => 'admin@moviehub.com', // He puesto este mail para coincidir con lo que te dije antes
+            'surname' => 'Principal',
+            'email' => 'admin@moviehub.com',
             'password' => Hash::make('12345678'),
             'role_id' => $adminRole->id,
         ]);
 
-        //  Crear usuario normal para pruebas
         User::create([
             'name' => 'Juan',
             'surname' => 'Pérez',
@@ -43,39 +41,35 @@ class DatabaseSeeder extends Seeder
             'role_id' => $userRole->id,
         ]);
 
-        //  Crear datos base
-        $genres = Genre::factory(10)->create();
+
+        $genreNames = [
+            'Acción', 'Aventura', 'Comedia', 'Drama', 'Fantasía',
+            'Terror', 'Ciencia Ficción', 'Musical', 'Misterio', 'Romance'
+        ];
+
+        $genres = collect();
+        foreach ($genreNames as $name) {
+            $genres->push(Genre::create([
+                'name' => $name,
+                'description' => 'Películas del género ' . $name
+            ]));
+        }
+
         $directors = Director::factory(10)->create();
-        $actors = Actor::factory(20)->create();
+        $actors = Actor::factory(30)->create();
 
-        //  Crear Películas y Relaciones
-        Movie::factory(15)->create(function () use ($directors) {
-            return ['director_id' => $directors->random()->id];
-        })->each(function($movie) use ($genres, $actors) {
-
-            // Relación N:M con Géneros
-            // recibe ids y los saca con pluck
-            $movie->genres()->attach($genres->random(rand(1, 3))->pluck('id'));
-
-            // Relación N:M con Actores
-            $movie->actors()->attach($actors->random(rand(2, 5))->pluck('id'));
-
-
-        });
-        //  Crear Películas y Relaciones
-        Movie::factory(15)->create(function () use ($directors) {
+        Movie::factory(30)->create(function () use ($directors) {
             return ['director_id' => $directors->random()->id];
         })->each(function($movie) use ($genres, $actors) {
 
             $movie->genres()->attach($genres->random(rand(1, 3))->pluck('id'));
 
-            // REQUISITO 17: Rellenar la columna extra desde código
-            // Seleccionamos actores al azar
+
             $randomActors = $actors->random(rand(2, 5));
 
             foreach ($randomActors as $actor) {
                 $movie->actors()->attach($actor->id, [
-                    'character_name' => fake()->name() // Nombre del personaje falso
+                    'character_name' => fake()->name()
                 ]);
             }
         });

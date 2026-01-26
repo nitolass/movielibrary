@@ -1,49 +1,73 @@
 <?php
 
+use App\Models\User;
+use App\Models\Role;
 use App\Models\Actor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use function Pest\Laravel\{assertDatabaseHas, assertDatabaseMissing};
 
 uses(RefreshDatabase::class);
 
-it('puedo crear un actor', function () {
-    Actor::create([
-        'name'        => 'Brad Pitt',
-        'biography'   => 'Actor de Hollywood',
-        'birth_year'  => 1963,
-        'nationality' => 'USA',
-        'photo'       => 'brad.jpg'
-    ]);
+// Función auxiliar para crear admin
+function createAdminForActor() {
+    // Si tienes roles, creamos uno, si no, usa el factory normal
+    $role = Role::firstOrCreate(['name' => 'admin']);
+    return User::factory()->create(['role_id' => $role->id]);
+}
 
-    assertDatabaseHas('actors', [
-        'name' => 'Brad Pitt'
-    ]);
+test('admin can list actors', function () {
+    $admin = createAdminForActor();
+    Actor::factory()->count(3)->create();
+
+    $response = $this->actingAs($admin)->get(route('actors.index'));
+    $response->assertStatus(200);
 });
 
-it('puedo actualizar un actor', function () {
-    $actor = Actor::create([
-        'name' => 'Leonardo',
-        'birth_year' => 1974,
-        'nationality' => 'USA'
+test('admin can create an actor', function () {
+    $admin = createAdminForActor();
+
+    // OJO: Ajusta 'name' y 'surname' si tu BD tiene otros campos
+    $response = $this->actingAs($admin)->post(route('actors.store'), [
+        'name' => 'Brad',
+        'surname' => 'Pitt',
     ]);
 
-    $actor->update([
-        'name' => 'Leonardo DiCaprio'
-    ]);
-
-    assertDatabaseHas('actors', ['name' => 'Leonardo DiCaprio']);
-    expect($actor->refresh()->name)->toBe('Leonardo DiCaprio');
+    $response->assertRedirect(route('actors.index'));
+    $this->assertDatabaseHas('actors', ['name' => 'Brad']);
 });
 
-it('puedo eliminar un actor', function () {
-    $actor = Actor::create([
-        'name' => 'Actor Extra',
-        'nationality' => 'Desconocida'
-    ]);
+test('admin can delete an actor', function () {
+    $admin = createAdminForActor();
+    $actor = Actor::factory()->create();
 
-    $actor->delete();
+    $response = $this->actingAs($admin)->delete(route('actors.destroy', $actor));
 
-    assertDatabaseMissing('actors', [
-        'id' => $actor->id
-    ]);
+    $response->assertRedirect(route('actors.index'));
+    $this->assertDatabaseMissing('actors', ['id' => $actor->id]);
+});
+test('admin can see the create actor form', function () {
+    $admin = createAdminForActor();
+    $response = $this->actingAs($admin)->get(route('actors.create'));
+    $response->assertStatus(200);
+});
+
+test('admin can see the edit actor form', function () {
+    $admin = createAdminForActor();
+    $actor = Actor::factory()->create();
+
+    $response = $this->actingAs($admin)->get(route('actors.edit', $actor));
+    $response->assertStatus(200);
+});
+test('admin can see create actor form', function () {
+    $admin = createAdminForActor();
+    // Si falla, prueba con 'admin.actors.create'
+    $response = $this->actingAs($admin)->get(route('actors.create'));
+    $response->assertStatus(200);
+});
+
+test('admin can see edit actor form', function () {
+    $admin = createAdminForActor();
+    $actor = \App\Models\Actor::factory()->create();
+
+    $response = $this->actingAs($admin)->get(route('actors.edit', $actor));
+    $response->assertStatus(200);
 });

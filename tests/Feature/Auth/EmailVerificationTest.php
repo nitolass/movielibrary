@@ -4,6 +4,8 @@ use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Auth\Notifications\VerifyEmail;
 
 test('email verification screen can be rendered', function () {
     $user = User::factory()->unverified()->create();
@@ -28,7 +30,7 @@ test('email can be verified', function () {
 
     Event::assertDispatched(Verified::class);
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
-    $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+    $response->assertRedirect(route('user.dashboard', absolute: false).'?verified=1');
 });
 
 test('email is not verified with invalid hash', function () {
@@ -43,4 +45,30 @@ test('email is not verified with invalid hash', function () {
     $this->actingAs($user)->get($verificationUrl);
 
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
+});
+test('verification notification is sent', function () {
+    $user = User::factory()->unverified()->create();
+
+    Notification::fake();
+    $response = $this->from('/perfil')
+        ->actingAs($user)
+        ->post(route('verification.send'));
+
+    $response->assertRedirect('/perfil')
+        ->assertSessionHas('status', 'verification-link-sent');
+
+    Notification::assertSentTo($user, VerifyEmail::class);
+});
+
+test('redirects if user is already verified when requesting notification', function () {
+    $user = User::factory()->create();
+
+    Notification::fake();
+
+    $response = $this->actingAs($user)
+        ->post(route('verification.send'));
+
+    $response->assertRedirect(route('user.dashboard'));
+
+    Notification::assertNothingSent();
 });

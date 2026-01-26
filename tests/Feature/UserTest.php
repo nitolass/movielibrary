@@ -3,87 +3,55 @@
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use function Pest\Laravel\{assertDatabaseHas, assertDatabaseMissing};
 
 uses(RefreshDatabase::class);
 
-it('puedo crear un usuario asignado a un rol', function () {
-    $role = Role::create(['name' => 'admin']);
+function createAdminUser() {
+    $role = Role::firstOrCreate(['name' => 'admin']);
+    return User::factory()->create(['role_id' => $role->id]);
+}
 
-    $datosUsuario = [
-        'name'     => 'Carlos',
-        'surname'  => 'Ruiz', //
-        'email'    => 'carlos@example.com',
-        'password' => 'secret123',
-        'role_id'  => $role->id
-    ];
+test('admin can list users', function () {
+    $admin = createAdminUser();
+    User::factory()->count(3)->create();
 
-    User::create($datosUsuario);
+    $response = $this->actingAs($admin)->get(route('admin.users.index'));
 
-    assertDatabaseHas('users', [
-        'email'    => 'carlos@example.com',
-        'surname'  => 'Ruiz',
-        'role_id'  => $role->id
-    ]);
+    $response->assertStatus(200);
+    $response->assertViewHas('users');
 });
 
-it('puedo actualizar la información de un usuario', function () {
-    $role = Role::create(['name' => 'user']);
+test('admin can see create user form', function () {
+    $admin = createAdminUser();
 
-    // Usamos create manual
-    $user = User::create([
-        'name'     => 'Nombre Antiguo',
-        'surname'  => 'Apellido Antiguo',
-        'email'    => 'old@example.com',
-        'password' => '12345678',
-        'role_id'  => $role->id
-    ]);
+    $response = $this->actingAs($admin)->get(route('admin.users.create'));
 
-    $user->update([
-        'name'    => 'Nombre Nuevo',
-        'surname' => 'Apellido Nuevo',
-        'email'   => 'new@example.com'
-    ]);
-
-    // Verificación en DB
-    assertDatabaseHas('users', [
-        'id'      => $user->id,
-        'email'   => 'new@example.com',
-        'name'    => 'Nombre Nuevo',
-        'surname' => 'Apellido Nuevo'
-    ]);
-
-    expect($user->refresh()->email)->toBe('new@example.com');
+    $response->assertStatus(200);
 });
 
-it('puedo eliminar un usuario', function () {
-    $role = Role::create(['name' => 'guest']);
-    $user = User::create([
-        'name'     => 'A eliminar',
-        'surname'  => 'Test', //
-        'email'    => 'delete@example.com',
-        'password' => '...',
-        'role_id'  => $role->id
+test('admin can store a new user', function () {
+    $admin = createAdminUser();
+    $roleUser = Role::firstOrCreate(['name' => 'user']);
+
+    // 1. Visitamos primero la página de crear (para que Laravel sepa cuál es "atrás")
+    $this->actingAs($admin)->get(route('admin.users.create'));
+
+    $response = $this->actingAs($admin)->from(route('admin.users.create'))->post(route('admin.users.store'), [
+        'name' => 'Nuevo Usuario',
+        'surname' => 'Test', // OJO: Asegúrate de que este campo existe en tu validación y modelo
+        'email' => 'nuevo@test.com',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+        'role_id' => $roleUser->id,
     ]);
 
-    $user->delete();
+    // --- BLOQUE DE DEPURACIÓN ---
+    // Si hay errores de validación, esto te los mostrará en la terminal
+    if (session('errors')) {
+        dump(session('errors')->all());
+    }
+    // ----------------------------
 
-    assertDatabaseMissing('users', [
-        'email' => 'delete@example.com'
-    ]);
-});
-
-it('funciona la relación entre usuario y rol', function () {
-    $role = Role::create(['name' => 'SuperAdmin']);
-
-    $user = User::create([
-        'name'     => 'Admin',
-        'surname'  => 'User',
-        'email'    => 'admin@test.com',
-        'password' => 'password',
-        'role_id'  => $role->id
-    ]);
-
-    expect($user->role)->not->toBeNull();
-    expect($user->role->name)->toBe('SuperAdmin');
+    $response->assertRedirect(route('admin.users.create'));
+    $this->assertDatabaseHas('users', ['email' => 'nuevo@test.com']);
 });

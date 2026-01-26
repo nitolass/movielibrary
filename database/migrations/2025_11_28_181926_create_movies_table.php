@@ -17,8 +17,6 @@ return new class extends Migration {
             $table->text('description');
             $table->string('year', 4);
             $table->integer('duration')->comment('duration in minutes');
-            $table->integer('age_rating');
-            $table->string('country');
             $table->string('poster')->nullable();
             $table->timestamps();
         });

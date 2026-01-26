@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -17,6 +18,9 @@ class   ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = $request->user();
+        Gate::authorize('update', $user);
+
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
@@ -27,6 +31,10 @@ class   ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+
+        $user = $request->user();
+        Gate::authorize('update', $user);
+
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
@@ -43,6 +51,10 @@ class   ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+
+        $user = $request->user();
+        Gate::authorize('delete', $user);
+
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);
