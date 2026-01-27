@@ -55,19 +55,34 @@ class User extends Authenticatable
     public function isAdmin(){
         return $this->role && $this->role->name === 'admin';
     }
-    public function watchLater()
-    {
-        return $this->belongsToMany(Movie::class, 'movie_user')
-            ->withPivot('type')
-            ->wherePivot('type', 'watch_later')
-            ->withTimestamps();
-    }
+    // En app/Models/User.php
 
+    // app/Models/User.php
+
+// 1. FAVORITOS
     public function favorites()
     {
         return $this->belongsToMany(Movie::class, 'movie_user')
-            ->withPivot('type')
             ->wherePivot('type', 'favorite')
+            ->withPivot('type') // Importante para poder acceder al tipo
+            ->withTimestamps();
+    }
+
+// 2. VER MÁS TARDE
+    public function watchLater()
+    {
+        return $this->belongsToMany(Movie::class, 'movie_user')
+            ->wherePivot('type', 'watch_later')
+            ->withPivot('type')
+            ->withTimestamps();
+    }
+
+// 3. VISTAS
+    public function watched()
+    {
+        return $this->belongsToMany(Movie::class, 'movie_user')
+            ->wherePivot('type', 'watched')
+            ->withPivot('type')
             ->withTimestamps();
     }
 }

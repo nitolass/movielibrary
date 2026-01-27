@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Auth;
 // RUTA PARA GENERAR PDFS (USUARIO NORMAL)
 // =========================================================================
 Route::middleware(['auth'])->group(function () {
-    Route::get('/mis-peliculas/pdf', [PdfController::class, 'exportWatchLater'])->name('pdf.watchLater');
-    Route::get('/pelicula/{movie}/pdf', [PdfController::class, 'movieSheet'])->name('pdf.movieSheet');
+    Route::get('/mis-peliculas/pdf', [PdfController::class, 'admin-user-list'])->name('pdf.admin-user-list');
+    Route::get('/pelicula/{movie}/pdf', [PdfController::class, 'admin-user-report'])->name('pdf.admin-user-report');
 });
 
 // =========================================================================
@@ -43,10 +43,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('user.dashboard');
 
     Route::controller(UserDashboardController::class)->group(function () {
+
+
         Route::get('/mis-favoritos', 'favorites')->name('user.favorites');
         Route::get('/ver-mas-tarde', 'watchLater')->name('user.watch_later');
         Route::get('/puntuadas', 'rated')->name('user.rated');
         Route::get('/historial', 'watched')->name('user.watched');
+
+        Route::post('/pelicula/{movie}/favorito', 'toggleFavorite')->name('user.toggle.favorite');
+        Route::post('/pelicula/{movie}/ver-mas-tarde', 'toggleWatchLater')->name('user.toggle.watchLater');
+        Route::post('/pelicula/{movie}/vista', 'toggleWatched')->name('user.toggle.watched');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
