@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\StoreGenreRequest;
 use App\Http\Requests\UpdateGenreRequest;
 use App\Models\Genre;
+use App\Events\GenreCreated;
+use Illuminate\Support\Facades\Artisan;
+use App\Jobs\RecalculateMovieRating;
 
 class GenreController extends Controller
 {
@@ -21,7 +24,12 @@ class GenreController extends Controller
 
     public function store(StoreGenreRequest $request)
     {
-        Genre::create($request->validated());
+        $genre = Genre::create($request->validated());
+
+        RecalculateMovieRating::dispatch();
+        GenreCreated::dispatch($genre);
+        Artisan::call('movies:stats');
+
         return redirect()->route('admin.genres.index');
     }
 

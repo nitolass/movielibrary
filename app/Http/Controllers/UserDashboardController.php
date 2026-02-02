@@ -6,10 +6,21 @@ use App\Http\Controllers\Admin\Controller;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Artisan;
+use App\Mail\FavoriteAddedMail;
+use App\Mail\WatchLaterAddedMail;
+use Illuminate\Support\Facades\Mail;
 
 class UserDashboardController extends Controller
 {
 
+    public function index()
+    {
+        Artisan::call('movies:random');
+
+
+        return view('user.dashboard');
+    }
     public function favorites()
     {
 
@@ -45,17 +56,28 @@ class UserDashboardController extends Controller
 
     public function toggleFavorite(Movie $movie)
     {
-        Auth::user()->favorites()->toggle([
+        $result = Auth::user()->favorites()->toggle([
             $movie->id => ['type' => 'favorite']
         ]);
+
+        if (count($result['attached']) > 0) {
+            // EMAIL 4: Aviso de favorito
+            Mail::to(Auth::user()->email)->send(new FavoriteAddedMail($movie));
+        }
+
         return back();
     }
 
     public function toggleWatchLater(Movie $movie)
     {
-        Auth::user()->watchLater()->toggle([
+        $result = Auth::user()->watchLater()->toggle([
             $movie->id => ['type' => 'watch_later']
         ]);
+
+        if (count($result['attached']) > 0) {
+            Mail::to(Auth::user()->email)->send(new WatchLaterAddedMail($movie));
+        }
+
         return back();
     }
 

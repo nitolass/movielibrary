@@ -44,7 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::controller(UserDashboardController::class)->group(function () {
 
-
+        Route::get('/user/dashboard',)->name('user.dashboard');
         Route::get('/mis-favoritos', 'favorites')->name('user.favorites');
         Route::get('/ver-mas-tarde', 'watchLater')->name('user.watch_later');
         Route::get('/puntuadas', 'rated')->name('user.rated');

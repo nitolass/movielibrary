@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\MovieCreated;
 use App\Models\Movie;
 use App\Models\Genre;
 use App\Models\Director;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use App\Http\Requests\MovieRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Artisan;
+use App\Jobs\ProcessPosterImage;
 
 class MovieController extends Controller
 {
@@ -48,8 +51,12 @@ class MovieController extends Controller
         }
 
         $movie = \App\Models\Movie::create($validated);
-
         $movie->genres()->sync($request->genres);
+
+        ProcessPosterImage::dispatch($movie->title);
+
+        MovieCreated::dispatch($movie);
+        Artisan::call('movies:clean');
 
         return redirect()->route('movies.index')
             ->with('success', '¡Película creada correctamente!');

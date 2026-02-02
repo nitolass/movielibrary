@@ -6,6 +6,11 @@ use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Events\UserCreated;
+use App\Jobs\SendLoginAlertJob;
+use App\Mail\VerifyAccountMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class AuthController extends Controller
 {
@@ -23,6 +28,13 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->firstOrFail();
         $token = $user->createToken('api_token')->plainTextToken;
+
+        //Evento
+        UserCreated::dispatch($user);
+        //Job
+        SendLoginAlertJob::dispatch($user->email);
+        //Email
+        Mail::to($user->email)->send(new VerifyAccountMail($user));
 
         return response()->json([
             'message' => 'Login exitoso',
