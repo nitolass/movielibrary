@@ -52,6 +52,6 @@ test('admin can store a new user', function () {
     }
     // ----------------------------
 
-    $response->assertRedirect(route('admin.users.create'));
+    $response->assertRedirect(route('admin.users.index'));
     $this->assertDatabaseHas('users', ['email' => 'nuevo@test.com']);
 });

@@ -8,14 +8,14 @@
             &larr; Volver al catálogo
         </a>
 
-        <div class="bg-[#16181c] border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+        {{-- 1. FICHA PRINCIPAL DE LA PELÍCULA --}}
+        <div class="bg-[#16181c] border border-white/5 rounded-2xl overflow-hidden shadow-2xl mb-12">
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
 
                 {{-- COLUMNA 1: PÓSTER --}}
                 <div class="relative aspect-[2/3] md:aspect-auto">
                     @if($movie->poster)
-                        {{-- Usamos asset storage para sacar la imagen --}}
-                        <img src="{{ asset('storage/' . $movie->poster) }}" class="w-full h-full object-cover">
+                        <img src="{{ asset('storage/' . $movie->poster) }}" alt=" w-full h-full object-cover">
                     @else
                         <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500 font-bold">Sin Imagen</div>
                     @endif
@@ -62,32 +62,28 @@
                         </div>
                     </div>
 
-                    {{-- ACCIONES DE USUARIO (SOLO BOTONES DE INTERACCIÓN) --}}
+                    {{-- ACCIONES DE USUARIO --}}
                     <div class="flex flex-wrap gap-4 pt-6 border-t border-white/5 items-center">
-
                         @auth
                             @php
-                                // Usamos el helper auth() para no necesitar importar clases arriba
                                 $user = auth()->user();
-
-                                // Verificamos si la película está en las listas del usuario
                                 $isFavorite   = $user->favorites->contains($movie->id);
                                 $isWatchLater = $user->watchLater->contains($movie->id);
                                 $isWatched    = $user->watched->contains($movie->id);
                             @endphp
 
-                            {{-- 1. BOTÓN FAVORITOS ❤️ --}}
+                            {{-- Favoritos --}}
                             <form action="{{ route('user.toggle.favorite', $movie) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="flex items-center gap-2 px-6 py-3 font-bold rounded-xl transition-all border group {{ $isFavorite ? 'bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/20' : 'bg-gray-800 border-gray-700 text-gray-300 hover:text-white hover:border-red-500 hover:bg-gray-700' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ $isFavorite ? 'fill-current' : 'group-hover:text-red-500' }}" fill="{{ $isFavorite ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                     </svg>
-                                    <span>{{ $isFavorite ? 'Quitar Favorito' : 'Favoritos' }}</span>
+                                    <span>{{ $isFavorite ? 'Quitar' : 'Favoritos' }}</span>
                                 </button>
                             </form>
 
-                            {{-- 2. BOTÓN VER MÁS TARDE 🕒 --}}
+                            {{-- Ver Tarde --}}
                             <form action="{{ route('user.toggle.watchLater', $movie) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="flex items-center gap-2 px-6 py-3 font-bold rounded-xl transition-all border group {{ $isWatchLater ? 'bg-yellow-500 border-yellow-400 text-black shadow-lg shadow-yellow-500/20' : 'bg-gray-800 border-gray-700 text-gray-300 hover:text-white hover:border-yellow-400 hover:bg-gray-700' }}">
@@ -98,7 +94,7 @@
                                 </button>
                             </form>
 
-                            {{-- 3. BOTÓN YA VISTA ✅ --}}
+                            {{-- Vista --}}
                             <form action="{{ route('user.toggle.watched', $movie) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="flex items-center gap-2 px-6 py-3 font-bold rounded-xl transition-all border group {{ $isWatched ? 'bg-green-600 border-green-500 text-white shadow-lg shadow-green-600/20' : 'bg-gray-800 border-gray-700 text-gray-300 hover:text-white hover:border-green-500 hover:bg-gray-700' }}">
@@ -109,16 +105,94 @@
                                     <span>{{ $isWatched ? 'Vista' : 'Marcar Vista' }}</span>
                                 </button>
                             </form>
-
                         @else
                             <div class="text-gray-400 text-sm italic bg-white/5 px-4 py-2 rounded-lg border border-white/5">
-                                <a href="{{ route('login') }}" class="text-yellow-400 font-bold hover:underline">Inicia sesión</a> para guardar esta película en tus listas.
+                                <a href="{{ route('login') }}" class="text-yellow-400 font-bold hover:underline">Inicia sesión</a> para guardar esta película.
                             </div>
                         @endauth
-
                     </div>
                 </div>
             </div>
         </div>
+
+        {{-- 2. SECCIÓN DE RESEÑAS --}}
+        <div class="mt-8 border-t border-white/10 pt-8">
+            <h3 class="text-3xl font-bold text-white mb-8 flex items-center gap-2">
+                Reseñas de la Comunidad <span class="text-yellow-400">.</span>
+            </h3>
+
+            {{-- FORMULARIO DE RESEÑA (Solo Auth) --}}
+            @auth
+                <div class="bg-[#16181c] border border-white/5 p-6 rounded-2xl mb-10 shadow-lg">
+                    <h4 class="text-lg font-bold text-yellow-400 mb-4">¿Qué te ha parecido?</h4>
+
+                    <form action="{{ route('reviews.store', $movie->id) }}" method="POST">
+                        @csrf
+                        <div class="flex flex-col md:flex-row gap-4 mb-4">
+                            {{-- Estrellas --}}
+                            <div class="w-full md:w-1/4">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Puntuación</label>
+                                <select name="rating" class="w-full bg-[#0f1115] text-white border border-gray-700 rounded-xl p-3 focus:border-yellow-400 outline-none transition-colors">
+                                    <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
+                                    <option value="4">⭐⭐⭐⭐ Muy buena</option>
+                                    <option value="3">⭐⭐⭐ Normal</option>
+                                    <option value="2">⭐⭐ Mala</option>
+                                    <option value="1">⭐ Terrible</option>
+                                </select>
+                            </div>
+
+                            {{-- Comentario --}}
+                            <div class="w-full md:w-3/4">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Tu opinión</label>
+                                <textarea name="content" rows="3" placeholder="Comparte tu opinión con la comunidad..." class="w-full bg-[#0f1115] text-white border border-gray-700 rounded-xl p-3 focus:border-yellow-400 outline-none transition-colors" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <button type="submit" class="px-6 py-2 bg-yellow-400 text-black font-bold rounded-xl hover:bg-yellow-500 transition-all shadow-[0_0_15px_rgba(250,204,21,0.3)] transform hover:-translate-y-0.5">
+                                Publicar Reseña
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            @else
+                <div class="bg-[#16181c] border border-white/5 p-8 rounded-2xl text-center mb-10">
+                    <p class="text-gray-400 text-lg">
+                        Debes <a href="{{ route('login') }}" class="text-yellow-400 font-bold hover:underline">iniciar sesión</a> para escribir una reseña.
+                    </p>
+                </div>
+            @endauth
+
+            {{-- LISTA DE RESEÑAS --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @forelse($movie->reviews as $review)
+                    <div class="bg-[#16181c] border border-white/5 p-6 rounded-2xl hover:border-yellow-400/20 transition-all">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                {{-- Avatar con inicial --}}
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-400 to-yellow-600 flex items-center justify-center text-black font-bold text-lg shadow-lg shadow-yellow-500/20">
+                                    {{ substr($review->user->name, 0, 1) }}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-white">{{ $review->user->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ $review->created_at->diffForHumans() }}</p>
+                                </div>
+                            </div>
+                            <div class="text-yellow-400 tracking-wide text-sm">
+                                @for($i=0; $i < $review->rating; $i++) ★ @endfor
+                            </div>
+                        </div>
+                        <p class="text-gray-300 text-sm leading-relaxed bg-[#0f1115] p-4 rounded-xl border border-white/5 italic">
+                            "{{ $review->content }}"
+                        </p>
+                    </div>
+                @empty
+                    <div class="col-span-full py-12 text-center border border-dashed border-white/10 rounded-2xl">
+                        <p class="text-gray-500 italic">No hay reseñas para esta película aún. ¡Sé el primero!</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
     </div>
 @endsection

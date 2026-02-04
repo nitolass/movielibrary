@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->text('biography')->nullable();
-            $table->year('birth_year')->nullable();
+            $table->year('birth_date')->nullable();
             $table->string('nationality')->nullable();
             $table->string('photo')->nullable();
             $table->timestamps();

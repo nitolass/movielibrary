@@ -12,9 +12,15 @@ class Director extends Model
     protected $fillable = [
         'name',
         'biography',
-        'birth_year',
+        'birth_date',
         'nationality',
         'photo',
+        'is_active'
+    ];
+
+    protected $casts = [
+        'birth_date' => 'date',
+        'is_active' => 'boolean',
     ];
 
     // Relación 1:N

@@ -1,23 +1,23 @@
 <?php
 
-namespace Database\Factories;
+    namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Director; // Importante
+    use Illuminate\Database\Eloquent\Factories\Factory;
+    use App\Models\Director; // Importante
 
-class MovieFactory extends Factory
-{
-    protected $model = \App\Models\Movie::class;
-
-    public function definition(): array
+    class MovieFactory extends Factory
     {
-        return [
-            'title' => $this->faker->sentence(3),
-            'director_id' => Director::factory(),
-            'year' => $this->faker->year,
-            'description' => $this->faker->paragraph,
-            'duration' => $this->faker->numberBetween(80, 180),
-            'poster' => null,
-        ];
+        protected $model = \App\Models\Movie::class;
+
+        public function definition(): array
+        {
+            return [
+                'title'       => $this->faker->sentence,
+                'description' => $this->faker->paragraph,
+                'year'        => $this->faker->year,
+                'duration'    => $this->faker->numberBetween(80, 210),
+                'director_id' => Director::factory(),
+                'poster'      => null,
+            ];
+        }
     }
-}

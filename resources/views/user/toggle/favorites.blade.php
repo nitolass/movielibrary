@@ -32,7 +32,6 @@
                                 <h3 class="text-white font-bold truncate">{{ $movie->title }}</h3>
                                 <div class="flex justify-between items-center mt-1">
                                     <p class="text-gray-500 text-xs">{{ $movie->year }}</p>
-                                    <span class="text-yellow-400 text-xs">★ 4.5</span>
                                 </div>
                             </div>
                         </a>

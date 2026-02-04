@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Admin\Controller;
+use App\Http\Controllers\Admin\Controller; // Ojo: Asegúrate de que heredas del correcto
 use App\Http\Resources\ActorResource;
 use App\Models\Actor;
 use Illuminate\Http\Request;
@@ -11,52 +11,41 @@ use App\Jobs\AuditLogJob;
 
 class ActorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $actors= Actor::with('movies')->get();
+        // Paginamos para evitar cargas masivas
+        $actors = Actor::with('movies')->paginate(10);
         return ActorResource::collection($actors);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate(['name' => 'required|string']);
 
         $actor = Actor::create($validated);
-        //Job
-        AuditLogJob::dispatch("Creación de actor: {$actor->name}");
 
+        // Tus Jobs y Eventos
+        AuditLogJob::dispatch("Creación de actor: {$actor->name}");
         ActorCreated::dispatch($actor);
 
         return response()->json($actor, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $actor)
+    public function show(Actor $actor)
     {
         return new ActorResource($actor);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Actor $actor)
     {
-        //
+        $validated = $request->validate(['name' => 'required|string']);
+        $actor->update($validated);
+        return response()->json($actor);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Actor $actor)
     {
-        //
+        $actor->delete();
+        return response()->json(null, 204);
     }
 }

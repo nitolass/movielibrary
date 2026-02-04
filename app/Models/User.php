@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Movie;
@@ -11,7 +12,7 @@ use App\Models\Movie;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory,  Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -55,11 +56,8 @@ class User extends Authenticatable
     public function isAdmin(){
         return $this->role && $this->role->name === 'admin';
     }
-    // En app/Models/User.php
 
-    // app/Models/User.php
 
-// 1. FAVORITOS
     public function favorites()
     {
         return $this->belongsToMany(Movie::class, 'movie_user')
@@ -68,7 +66,6 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-// 2. VER MÁS TARDE
     public function watchLater()
     {
         return $this->belongsToMany(Movie::class, 'movie_user')
@@ -77,13 +74,16 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-// 3. VISTAS
     public function watched()
     {
         return $this->belongsToMany(Movie::class, 'movie_user')
             ->wherePivot('type', 'watched')
             ->withPivot('type')
             ->withTimestamps();
+    }
+
+    public function reviews(){
+        return $this->hasMany(Review::class);
     }
 }
 

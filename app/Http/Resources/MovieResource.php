@@ -7,6 +7,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class MovieResource extends JsonResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
     public function toArray(Request $request): array
     {
         return [
@@ -16,7 +21,8 @@ class MovieResource extends JsonResource
             'duration' => $this->duration . ' min',
             'description' => $this->description,
             'poster' => $this->poster ? asset('storage/' . $this->poster) : null,
-            'director' => $this->director->name ?? 'Sin director',
+            'director' => $this->director?->name ?? 'Sin director',
+
             'genres' => $this->genres->pluck('name'),
             'actors' => $this->actors->map(function($actor) {
                 return $actor->name;

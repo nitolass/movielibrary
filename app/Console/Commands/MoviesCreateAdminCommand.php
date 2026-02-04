@@ -11,7 +11,7 @@ class MoviesCreateAdminCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'movie:create-admin {email} {password}';
+        protected $signature = 'movies:create-admin {email} {password}';
 
     /**
      * The console command description.

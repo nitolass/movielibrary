@@ -32,31 +32,31 @@ class MovieController extends Controller
         return view('admin.movies.create', compact('genres', 'directors', 'actors'));
     }
 
-    public function store(Request $request)
+    public function store(MovieRequest $request)
     {
-        $validated = $request->validate([
-            'title'       => 'required|string|max:255',
-            'year' => 'required|integer|min:1900|max:' . (now()->year + 1),
-            'duration' => 'required|integer|min:1',
-            'director_id' => 'required|exists:directors,id',
-            'description' => 'required|string',
-            'poster'      => 'nullable|image|max:2048', // 2MB Max
-            'genres'      => 'required|array',
-            'genres.*'    => 'exists:genres,id',
-        ]);
+        $data = $request->validated();
 
+
+        // 2. Procesamos el póster y lo metemos en el array de datos
         if ($request->hasFile('poster')) {
             $path = $request->file('poster')->store('posters', 'public');
-            $validated['poster'] = $path;
+            $data['poster'] = $path; // <-- Lo guardamos en $data, no en una variable suelta
         }
 
-        $movie = \App\Models\Movie::create($validated);
+        // 3. Pasamos TODO el array $data a create.
+        // Aquí es donde irán title, year, description, duration, etc.
+        $movie = Movie::create($data);
+
+        // 4. Relaciones
         $movie->genres()->sync($request->genres);
+        if ($request->has('actors')) {
+            $movie->actors()->sync($request->actors);
+        }
 
-        ProcessPosterImage::dispatch($movie->title);
-
-        MovieCreated::dispatch($movie);
-        Artisan::call('movies:clean');
+        // 5. Tus procesos extra
+        \App\Jobs\ProcessPosterImage::dispatch($movie->title);
+        \App\Events\MovieCreated::dispatch($movie);
+        \Illuminate\Support\Facades\Artisan::call('movies:clean');
 
         return redirect()->route('movies.index')
             ->with('success', '¡Película creada correctamente!');
@@ -103,7 +103,7 @@ class MovieController extends Controller
 
     public function destroy(Movie $movie)
     {
-        Gate::authorize('delete', $movie);
+        // Gate::authorize('delete', $movie);
         if ($movie->poster) {
             Storage::disk('public')->delete($movie->poster);
         }

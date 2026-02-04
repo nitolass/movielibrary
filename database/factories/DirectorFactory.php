@@ -13,7 +13,7 @@ class DirectorFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'biography' => $this->faker->paragraph(),
-            'birth_year' => $this->faker->year(),
+            'birth_date' => $this->faker->year(),
             'nationality' => $this->faker->country(),
             'photo' => null,
         ];

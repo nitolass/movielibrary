@@ -16,7 +16,7 @@
                         <a href="{{ route('user.movies.show', $movie) }}">
                             <div class="relative aspect-[2/3]">
                                 @if($movie->poster)
-                                    <img src="{{ asset('storage/' . $movie->poster) }}" class="w-full h-full object-cover">
+                                    <img src="{{ asset('storage/' . $movie->poster) }}" alt=" w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500">Sin img</div>
                                 @endif
@@ -36,7 +36,6 @@
         @else
             <div class="flex flex-col items-center justify-center h-64 border-2 border-dashed border-gray-700 rounded-xl bg-white/5">
                 <p class="text-gray-400 text-lg mb-2">Aún no has puntuado nada.</p>
-                {{-- CORREGIDO: Ruta al catálogo --}}
                 <a href="{{ route('user.movies.index') }}" class="text-yellow-400 hover:text-yellow-300 font-bold text-sm">Ir a puntuar &rarr;</a>
             </div>
         @endif

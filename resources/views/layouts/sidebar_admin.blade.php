@@ -1,5 +1,6 @@
 <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0f1115] border-r border-white/5 flex flex-col transition-transform duration-300 transform -translate-x-full md:translate-x-0">
 
+    {{-- LOGO --}}
     <div class="h-20 flex items-center px-8 border-b border-white/5">
         <a href="{{ route('admin.dashboard') }}" class="text-3xl font-black tracking-tighter text-white font-['Outfit']">
             MovieHub<span class="text-yellow-400">.</span>
@@ -8,6 +9,7 @@
 
     <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-scrollbar">
 
+        {{-- SECCIÓN PRINCIPAL --}}
         <p class="px-4 text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Menu Principal</p>
 
         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'bg-yellow-400 text-black font-bold shadow-[0_0_15px_rgba(250,204,21,0.4)]' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
@@ -49,7 +51,7 @@
                 <span>Actores</span>
             </a>
 
-            <a href="{{ route('directors.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('directors.*') ? 'bg-yellow-400 text-black font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+            <a href="{{ route('directors.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.directors') ? 'bg-yellow-400 text-black font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
@@ -57,6 +59,7 @@
             </a>
         </div>
 
+        {{-- SECCIÓN CUENTA --}}
         <div class="mt-6 pt-6 border-t border-white/5">
             <p class="px-4 text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Cuenta</p>
             <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('profile.edit') ? 'bg-yellow-400 text-black font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">

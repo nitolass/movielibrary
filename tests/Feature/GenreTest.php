@@ -32,6 +32,7 @@ test('admin can see create genre form', function () {
 });
 
 test('admin can create a genre', function () {
+    $this->withoutExceptionHandling();
     $admin = createAdminForGenre();
 
     $response = $this->actingAs($admin)->post(route('admin.genres.store'), [
