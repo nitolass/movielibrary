@@ -37,7 +37,6 @@ class PublicCatalogController extends Controller
         // withQueryString() es vital para no perder el ?sort=recent al cambiar de página
         $movies = $query->paginate(12)->withQueryString();
 
-        // 6. CARGAR TODOS LOS GÉNEROS
         $allGenres = Genre::orderBy('name')->get();
 
         return view('user.movies.index', compact('movies', 'allGenres'));
@@ -45,7 +44,7 @@ class PublicCatalogController extends Controller
 
     public function show(Movie $movie)
     {
-        // Gate::authorize('view', $movie); // Descomenta si usas policies
+        Gate::authorize('view', $movie);
         $movie->load(['director', 'genres']);
         return view('user.movies.show', compact('movie'));
     }

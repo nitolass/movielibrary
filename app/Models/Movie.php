@@ -56,7 +56,6 @@ class Movie extends Model
             return $query;
         }
 
-        // 'whereHas' entra en la tabla pivote 'genre_movie' y filtra
         return $query->whereHas('genres', function ($q) use ($genres) {
             $q->whereIn('genres.id', $genres);
         });
