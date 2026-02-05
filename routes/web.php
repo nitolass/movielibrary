@@ -23,8 +23,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-// 🎬 CATÁLOGO: Al pulsar "Explorar Catálogo", carga las películas
-// Esta es la ruta clave que usa tu botón {{ route('user.movies.index') }}
+
 Route::get('/catalogo', [PublicCatalogController::class, 'catalogo'])->name('user.movies.index');
 
 // Ver una película individual (también público)

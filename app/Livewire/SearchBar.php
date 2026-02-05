@@ -13,11 +13,14 @@ class SearchBar extends Component
     {
         $results = [];
 
-        // Solo buscamos si hay 2 o más letras escritas
+        // Solo buscamos si escribe 2 o más letras
         if (strlen($this->search) >= 2) {
-            $results = Movie::select('id', 'title', 'poster', 'year')
-                ->where('title', 'like', '%' . $this->search . '%')
-                ->take(5) // Limitamos a 5 resultados para no llenar la pantalla
+
+            // Usamos el Scope Search del modelo
+            // Guardamos en $results (antes lo guardabas en $movies y por eso no salía)
+            $results = Movie::search($this->search)
+                ->with('director') // Optimización: carga el director de una vez
+                ->take(5)
                 ->get();
         }
 

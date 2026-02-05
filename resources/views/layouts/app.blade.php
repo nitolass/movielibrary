@@ -38,16 +38,9 @@
             <a href="{{ route('welcome') }}" class="text-3xl font-black tracking-tighter text-yellow-400 hover:scale-105 transition-transform drop-shadow-lg">
                 MovieHub<span class="text-white">.</span>
             </a>
-
-            <a href="{{ route('user.movies.index') }}" class="hidden md:block text-sm font-bold text-gray-300 hover:text-white transition-colors">
-                Catálogo
-            </a>
         </div>
 
-        {{-- 2. BARRA DE BÚSQUEDA (LIVEWIRE) --}}
-        <div class="flex-1 max-w-2xl px-4">
-            <livewire:search-bar />
-        </div>
+
 
         {{-- 3. MENÚ DE USUARIO --}}
         <div class="flex items-center gap-4">

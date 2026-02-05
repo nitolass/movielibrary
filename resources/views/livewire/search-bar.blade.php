@@ -5,7 +5,7 @@
         <input
             wire:model.live.debounce.300ms="search"
             type="text"
-            placeholder="Buscar película..."
+            placeholder="Buscar título, año, director..."
             class="w-full bg-black/20 border border-white/10 rounded-full py-2 pl-10 pr-4 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition-all"
         >
 
@@ -21,23 +21,26 @@
     @if(strlen($search) >= 2)
         <div class="absolute w-full mt-2 bg-[#1f2937] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
             @forelse($results as $movie)
+                {{-- Enlace a la ficha de la película --}}
                 <a href="{{ route('user.movies.show', $movie->id) }}" class="flex items-center gap-3 p-3 hover:bg-yellow-400 hover:text-black transition-colors group border-b border-white/5 last:border-0">
 
                     {{-- Mini Poster --}}
                     @if($movie->poster)
-                        <img src="{{ asset('storage/' . $movie->poster) }}" class="w-8 h-12 object-cover rounded shadow-sm" alt="">
+                        <img src="{{ asset('storage/' . $movie->poster) }}" class="w-8 h-12 object-cover rounded shadow-sm" alt="{{ $movie->title }}">
                     @else
-                        <div class="w-8 h-12 bg-gray-700 rounded flex items-center justify-center text-[10px]">Sin img</div>
+                        <div class="w-8 h-12 bg-gray-700 rounded flex items-center justify-center text-[10px] text-gray-400">Sin img</div>
                     @endif
 
                     {{-- Texto --}}
                     <div>
                         <p class="font-bold text-sm text-white group-hover:text-black">{{ $movie->title }}</p>
-                        <p class="text-xs text-gray-400 group-hover:text-black/70">{{ $movie->year }}</p>
+                        <p class="text-xs text-gray-400 group-hover:text-black/70">
+                            {{ $movie->year }} • {{ $movie->director->name ?? 'Sin director' }}
+                        </p>
                     </div>
                 </a>
             @empty
-                <div class="p-4 text-center text-sm text-gray-500">
+                <div class="p-4 text-center text-sm text-gray-400">
                     No hemos encontrado nada... 🕵️
                 </div>
             @endforelse

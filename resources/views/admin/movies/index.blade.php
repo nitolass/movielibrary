@@ -19,13 +19,6 @@
 
 
 
-                <button class="group flex items-center gap-2 bg-gray-800/50 backdrop-blur-md text-gray-300 text-sm font-bold border border-white/10 rounded-xl py-2.5 px-5 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all shadow-sm hover:shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity">
-                        <path fill-rule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clip-rule="evenodd" />
-                    </svg>
-                    <span>Filtrar</span>
-                </button>
-
                 <a href="{{ route('movies.create') }}" class="relative inline-flex items-center justify-center px-6 py-2.5 font-bold text-sm text-black transition-all duration-300 bg-gradient-to-r from-yellow-400 to-yellow-500 font-['Outfit'] rounded-xl hover:from-yellow-300 hover:to-yellow-400 hover:shadow-[0_0_25px_rgba(250,204,21,0.6)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 whitespace-nowrap overflow-hidden group">
                     <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out"></span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 -ml-1 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
