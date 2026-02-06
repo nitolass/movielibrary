@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder; // Importante
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Director;
 use App\Models\Genre;
 use App\Models\Actor;
@@ -21,10 +21,11 @@ class Movie extends Model
         'duration',
         'poster',
         'director_id',
-        'genre_id'
+        'genre_id',
+        'score'
     ];
 
-    // Relaciones
+
     public function director() { return $this->belongsTo(Director::class); }
     public function genres() { return $this->belongsToMany(Genre::class); }
     public function actors() {

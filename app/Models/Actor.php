@@ -14,6 +14,7 @@ class Actor extends Model
         'birth_year',
         'nationality',
         'photo',
+        'score'
     ];
 
     public function movies()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Admin\Controller;
+use App\Jobs\AuditLogJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -29,12 +30,8 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->firstOrFail();
         $token = $user->createToken('api_token')->plainTextToken;
 
-        //Evento
-        UserCreated::dispatch($user);
-        //Job
-        SendLoginAlertJob::dispatch($user->email);
-        //Email
-        Mail::to($user->email)->send(new VerifyAccountMail($user));
+        AuditLogJob::dispatch("SEGURIDAD: Login exitoso vía API del usuario '{$user->email}'");
+
 
         return response()->json([
             'message' => 'Login exitoso',
@@ -46,7 +43,10 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $email = $request->user()->email;
         $request->user()->currentAccessToken()->delete();
+
+        AuditLogJob::dispatch("SEGURIDAD: Logout API del usuario '$email'");
         return response()->json(['message' => 'Token eliminado']);
     }
 }

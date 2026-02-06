@@ -7,45 +7,52 @@ use App\Models\User;
 class UserPolicy
 {
     /**
-     * El método 'before' se ejecuta antes que cualquier otro.
-     * Si devuelve true, se permite la acción sin mirar más.
+     * Admin: Acceso total.
      */
     public function before(User $user, string $ability)
     {
-        // CORREGIDO: Verificamos el ROL, no un email específico.
-        // Así el test pasará porque crea un user con role 'admin'.
-        if ($user->role->name === 'admin') {
+        if ($user->role && $user->role->name === 'admin') {
+            if ($ability === 'delete') {
+                return null;
+            }
+
             return true;
         }
+
+
+        return null;
     }
+
+
 
     public function viewAny(User $user): bool
     {
-        // Si no es admin (pasó el before), es false.
+        // Listado de usuarios: Solo Admin.
+        // Editor/Moderador: False (retorna false por defecto si no es admin)
         return false;
     }
 
     public function view(User $user, User $model): bool
     {
-        // Un usuario puede ver su propio perfil
+        // Un usuario (sea editor, moderador o normal) solo puede ver SU perfil
         return $user->id === $model->id;
     }
 
     public function create(User $user): bool
     {
-        // Solo admins (gestionado por before)
+        // Solo Admin puede crear usuarios manualmente desde panel
         return false;
     }
 
     public function update(User $user, User $model): bool
     {
-        // Un usuario puede editar su propio perfil
+        // Un usuario solo puede editar SU perfil
         return $user->id === $model->id;
     }
 
     public function delete(User $user, User $model): bool
     {
-        // Un usuario puede borrar su propia cuenta
+        // Un usuario solo puede borrar SU cuenta
         return $user->id === $model->id;
     }
 

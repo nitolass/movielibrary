@@ -20,6 +20,6 @@ class FavoriteAddedMail extends Mailable
     public function build()
     {
         return $this->subject(' Nueva película favorita: ' . $this->movie->title)
-            ->view('emails.favorite_added'); // (Recuerda crear la vista o usar text('...'))
+            ->view('emails.favorite_added');
     }
 }

@@ -3,35 +3,60 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Admin\Controller;
+use App\Jobs\AuditLogJob;
 use App\Models\Director;
 use App\Http\Resources\DirectorResource;
 use Illuminate\Http\Request;
-use App\Events\DirectorCreated;
-use App\Jobs\SyncExternalData;
+use Illuminate\Support\Facades\Gate;
 
 class DirectorController extends Controller
 {
     public function index()
     {
-
+        Gate::authorize('viewAny', Director::class);
         return DirectorResource::collection(Director::all());
     }
 
     public function show(Director $director)
     {
+        Gate::authorize('view', $director);
         return new DirectorResource($director);
     }
 
     public function store(Request $request)
     {
-        $val = $request->validate(['name' => 'required']);
-        $director = Director::create($val);
+        Gate::authorize('create', Director::class);
 
-        //Job
-        SyncExternalData::dispatch();
-        // Evento
-        DirectorCreated::dispatch($director);
+        $validated = $request->validate(['name' => 'required|string|max:255']);
+        $director = Director::create($validated);
 
-        return response()->json($director, 201);
+        AuditLogJob::dispatch("API: Director '{$director->name}' creado por " . $request->user()->email);
+
+        return new DirectorResource($director);
+    }
+
+    public function update(Request $request, Director $director)
+    {
+        Gate::authorize('update', $director);
+
+        $validated = $request->validate(['name' => 'required|string|max:255']);
+        $director->update($validated);
+
+        AuditLogJob::dispatch("API: Director '{$director->name}' actualizado por " . $request->user()->email);
+        return new DirectorResource($director);
+    }
+
+    // Añadimos Request $request en los paréntesis
+    public function destroy(Request $request, Director $director)
+    {
+        Gate::authorize('delete', $director);
+
+        $name = $director->name;
+
+        $director->delete();
+
+        AuditLogJob::dispatch("API: Director '$name' eliminado por " . $request->user()->email);
+
+        return response()->json(['message' => 'Director eliminado'], 204);
     }
 }

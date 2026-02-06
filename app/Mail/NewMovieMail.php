@@ -20,6 +20,6 @@ class NewMovieMail extends Mailable
     public function build()
     {
         return $this->subject('¡Estreno! Nueva película: ' . $this->movie->title)
-            ->view('emails.new_movie'); // Asegúrate de crear resources/views/emails/new_movie.blade.php
+            ->view('emails.new_movie');
     }
 }

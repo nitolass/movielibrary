@@ -19,7 +19,7 @@ class WatchLaterAddedMail extends Mailable
 
     public function build()
     {
-        return $this->subject('🕒 Guardada para ver más tarde: ' . $this->movie->title)
+        return $this->subject('Guardada para ver más tarde: ' . $this->movie->title)
             ->view('emails.watch_later_added');
     }
 }

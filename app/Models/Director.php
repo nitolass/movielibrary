@@ -15,7 +15,8 @@ class Director extends Model
         'birth_date',
         'nationality',
         'photo',
-        'is_active'
+        'is_active',
+        'score'
     ];
 
     protected $casts = [

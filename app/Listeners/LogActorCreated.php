@@ -14,7 +14,7 @@ class LogActorCreated
      */
     public function __construct()
     {
-        //
+
     }
 
     /**

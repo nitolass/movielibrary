@@ -4,65 +4,58 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StoreActorRequest;
 use App\Http\Requests\UpdateActorRequest;
+use App\Jobs\AuditLogJob;
 use App\Models\Actor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate; // <--- Importante
 
 class ActorController
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
+        Gate::authorize('viewAny', Actor::class);
         $actors = Actor::paginate(10);
         return view('admin.actors.index', compact('actors'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
+        Gate::authorize('create', Actor::class);
         return view('admin.actors.create');
     }
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(StoreActorRequest $request)
     {
+        Gate::authorize('create', Actor::class);
         $data = $request->validated();
 
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('actors', 'public');
         }
 
-        Actor::create($data);
+        $actor = Actor::create($data);
+
+        //Job
+        AuditLogJob::dispatch("ACTOR: Se ha creado el actor '{$actor->name}'");
 
         return redirect()->route('actors.index')->with('success', 'Actor creado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Actor $actor)
     {
+        Gate::authorize('view', $actor);
         return view('admin.actors.show', compact('actor'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Actor $actor)
     {
+        Gate::authorize('update', $actor);
         return view('admin.actors.edit', compact('actor'));
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateActorRequest $request, Actor $actor)
     {
+        Gate::authorize('update', $actor);
         $data = $request->validated();
 
         if ($request->hasFile('photo')) {
@@ -70,12 +63,16 @@ class ActorController
         }
 
         $actor->update($data);
-
+        //Job
+        AuditLogJob::dispatch("ACTOR: Se ha actualizado el actor '{$actor->name}'");
         return redirect()->route('actors.index')->with('success', 'Actor actualizado correctamente.');
     }
+
     public function destroy(Actor $actor)
     {
+        Gate::authorize('delete', $actor);
         $actor->delete();
+        AuditLogJob::dispatch("ACTOR: Se ha eliminado el actor '{$actor->name}'");
         return redirect()->route('actors.index')->with('success', 'Actor eliminado correctamente.');
     }
 }

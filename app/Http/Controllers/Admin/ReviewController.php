@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\Controller; // <-- Corregido el namespace (sobraba Admin)
+use App\Jobs\RecalculateMovieRating;
+use App\Jobs\AuditLogJob;
 use App\Models\Movie;
 use App\Models\Review;
 use App\Http\Requests\ReviewRequest;
@@ -14,6 +16,8 @@ class ReviewController extends Controller
     {
         // 1. Obtenemos solo los datos validados y limpios (rating y content)
         $data = $request->validated();
+        //Disparamos Job
+        RecalculateMovieRating::dispatch($movie);
 
         Review::updateOrCreate(
             ['user_id' => Auth::id(), 'movie_id' => $movie->id],
@@ -30,8 +34,10 @@ class ReviewController extends Controller
     {
         if (Auth::id() !== $review->user_id) { abort(403); }
 
-        // Aquí ya lo tenías bien
         $review->update($request->validated());
+
+        // Disparamos Job
+        RecalculateMovieRating::dispatch($review->movie);
 
         return redirect()->route('movies.show', $review->movie_id)
             ->with('success', 'Reseña actualizada.');
@@ -43,14 +49,25 @@ class ReviewController extends Controller
             abort(403);
         }
 
+        $movie = $review->movie;
+        $reviewId = $review->id;
+
         $review->delete();
+
+        if($movie) {
+            //Job
+            RecalculateMovieRating::dispatch($movie);
+        }
+
+        // Job
+        AuditLogJob::dispatch("Reseña eliminada (ID: $reviewId) por el usuario " . Auth::user()->email);
+
         return back()->with('success', 'Reseña eliminada.');
     }
 
     public function edit(Review $review)
     {
         if (Auth::user()->role->name !== 'admin' && Auth::id() !== $review->user_id) { abort(403); }
-        // Aquí faltaba retornar la vista, supongo que la tienes
         return view('user.reviews.edit', compact('review'));
     }
 }

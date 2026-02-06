@@ -5,17 +5,21 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Admin\Controller;
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Resources\GenreResource;
 
 class GenreController extends Controller
 {
     public function index()
     {
+        Gate::authorize('viewAny', Genre::class);
         return GenreResource::collection(Genre::all());
     }
 
     public function store(Request $request)
     {
+        Gate::authorize('create', Genre::class);
+
         $request->validate([
             'name' => 'required|string|unique:genres,name|max:255'
         ]);
@@ -30,11 +34,14 @@ class GenreController extends Controller
 
     public function show(Genre $genre)
     {
+        Gate::authorize('view', $genre);
         return new GenreResource($genre);
     }
 
     public function update(Request $request, Genre $genre)
     {
+        Gate::authorize('update', $genre);
+
         $request->validate([
             'name' => 'required|string|unique:genres,name,' . $genre->id . '|max:255'
         ]);
@@ -49,6 +56,7 @@ class GenreController extends Controller
 
     public function destroy(Genre $genre)
     {
+        Gate::authorize('delete', $genre);
         $genre->delete();
         return response()->json(['message' => 'Género eliminado'], 204);
     }

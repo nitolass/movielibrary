@@ -7,35 +7,42 @@ use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\GenreController;
 use App\Http\Controllers\Api\DirectorController;
 use App\Http\Controllers\Api\ActorController;
+use App\Http\Controllers\Api\UserController;
 
 Route::name('api.')->group(function () {
 
     // --- RUTAS PÚBLICAS ---
-
-    // Auth
     Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-    // Lectura pública (opcional, si quieres que cualquiera vea el catálogo)
-    Route::get('/directors', [DirectorController::class, 'index'])->name('directors.index');
-    Route::get('/directors/{director}', [DirectorController::class, 'show'])->name('directors.show');
+    // Lectura pública (index y show)
+    // Se definen fuera del grupo middleware auth:sanctum
+    Route::get('/directors', [DirectorController::class, 'index']);
+    Route::get('/directors/{director}', [DirectorController::class, 'show']);
 
-    Route::get('/actors', [ActorController::class, 'index'])->name('actors.index');
-    Route::get('/actors/{actor}', [ActorController::class, 'show'])->name('actors.show');
+    Route::get('/actors', [ActorController::class, 'index']);
+    Route::get('/actors/{actor}', [ActorController::class, 'show']);
+
+    Route::get('/movies', [MovieController::class, 'index']);
+    Route::get('/movies/{movie}', [MovieController::class, 'show']);
 
 
+    // --- RUTAS PROTEGIDAS (Requieren Token) ---
     Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+        // Perfil del usuario logueado
         Route::get('/user', function (Request $request) {
-            return $request->user();
-        })->name('user');
+            return new \App\Http\Resources\UserResource($request->user());
+        })->name('user.profile');
 
-        Route::apiResource('movies', MovieController::class);
+        // CRUD DE USUARIOS (El controlador protege que sea solo Admin)
+        Route::apiResource('users', UserController::class);
+        Route::apiResource('movies', MovieController::class)->except(['index', 'show']);
         Route::apiResource('genres', GenreController::class);
-
-        Route::post('/actors', [ActorController::class, 'store'])->name('actors.store');
-        Route::post('/directors', [DirectorController::class, 'store'])->name('directors.store');
+        Route::apiResource('actors', ActorController::class)->except(['index', 'show']);
+        Route::apiResource('directors', DirectorController::class)->except(['index', 'show']);
+        Route::apiResource('reviews', \App\Http\Controllers\Api\ReviewController::class);
 
     });
 });
