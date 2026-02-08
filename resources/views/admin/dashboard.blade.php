@@ -72,25 +72,38 @@
                     </div>
                 </a>
 
-                {{-- CARD FAVORITOS --}}
-                <a href="#" class="group relative p-1 rounded-3xl bg-gradient-to-b from-white/10 to-white/5 hover:from-red-400/50 hover:to-red-600/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(248,113,113,0.2)]">
-                    <div class="relative h-full p-8 bg-[#0f1115] rounded-[22px] flex flex-col items-start overflow-hidden">
+                {{-- 3. CARD REPORTE / PDF (NUEVO - SUSTITUYE FAVORITOS) --}}
+                <a href="{{ route('admin.pdf.dashboard_report') }}" target="_blank" class="group relative p-1 rounded-3xl bg-gradient-to-b from-white/10 to-white/5 hover:from-red-500/50 hover:to-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(248,113,113,0.3)]">
+                    <div class="relative h-full p-8 bg-[#0f1115] rounded-[22px] flex flex-col items-start overflow-hidden group-hover:bg-[#16181c] transition-colors">
 
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-red-500/20 transition-colors"></div>
+                        {{-- Efecto de fondo --}}
+                        <div class="absolute top-0 right-0 w-40 h-40 bg-red-500/10 rounded-full blur-3xl -mr-20 -mt-20 group-hover:bg-red-500/20 transition-colors duration-500"></div>
 
-                        <div class="w-14 h-14 bg-red-500 rounded-2xl flex items-center justify-center mb-6 text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        {{-- Icono --}}
+                        <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mb-6 text-white shadow-lg shadow-red-500/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </div>
-                        <h4 class="text-2xl font-black text-white mb-2 group-hover:text-red-400 transition-colors">{{ __('Favoritos') }}</h4>
-                        <p class="text-gray-400 text-sm leading-relaxed">
-                            {{ __('Accede rápidamente a tu lista de películas guardadas. Tus imprescindibles, en un solo lugar.') }}
+
+                        {{-- Texto --}}
+                        <h4 class="text-2xl font-black text-white mb-2 group-hover:text-red-400 transition-colors">{{ __('Informe de Estado') }}</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                            {{ __('Genera un análisis completo del catálogo: estadísticas, tops y distribución por géneros.') }}
                         </p>
+
+                        {{-- Botón simulado --}}
+                        <span class="mt-auto text-xs font-bold uppercase tracking-wider text-red-400 border border-red-500/30 px-3 py-1 rounded-lg bg-red-500/10 group-hover:bg-red-500 group-hover:text-white transition-all flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            {{ __('Descargar PDF') }}
+                        </span>
                     </div>
                 </a>
 
             </div>
+
 
             {{-- CURIOSIDAD DEL CINE --}}
             <div class="w-full h-56 rounded-3xl relative overflow-hidden flex items-center border border-white/10 shadow-2xl select-none">

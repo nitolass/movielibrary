@@ -66,7 +66,7 @@ test('user can see their rated movies page', function () {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)
-        ->get(route('user.rated'));
+        ->get(route('user.reviews.index'));
 
     $response->assertStatus(200);
 });

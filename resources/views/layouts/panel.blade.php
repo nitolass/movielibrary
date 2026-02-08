@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    {{-- Asegúrate de que tus scripts de vite apuntan correctamente --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
@@ -21,30 +22,33 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
     </style>
 
-    {{-- 1. IMPORTANTE: ESTILOS DE LIVEWIRE --}}
     @livewireStyles
 </head>
 <body class="bg-[#16181c] text-gray-100 min-h-screen antialiased" x-data="{ sidebarOpen: false }">
 
-{{-- SIDEBAR --}}
+{{-- SIDEBAR LATERAL --}}
 <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
      class="fixed inset-y-0 left-0 z-50 w-64 transition-transform duration-300 md:translate-x-0 bg-[#0f1115] border-r border-white/5">
 
-    @if(Auth::user() && (Auth::user()->email === 'juan@admin.es' || (Auth::user()->role && Auth::user()->role->name === 'admin')))
+    {{-- LÓGICA DE ROLES ACTUALIZADA --}}
+    {{-- Si tiene permiso de 'access-admin-panel' (Admin, Editor, Moderador) ve el menú de gestión --}}
+    @can('access-admin-panel')
         @include('layouts.sidebar_admin')
     @else
+        {{-- Si es un usuario normal, ve el menú de cliente --}}
         @include('layouts.sidebar_client')
-    @endif
+    @endcan
 
 </div>
 
-{{-- OVERLAY MOVIL --}}
+{{-- OVERLAY PARA MÓVIL --}}
 <div x-show="sidebarOpen" @click="sidebarOpen = false"
-     class="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"></div>
+     class="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm" style="display: none;"></div>
 
 {{-- CONTENIDO PRINCIPAL --}}
 <div class="flex-1 flex flex-col min-h-screen transition-all duration-300 md:ml-64">
 
+    {{-- HEADER SUPERIOR --}}
     <header class="h-20 flex items-center justify-between px-6 py-4 bg-[#0f1115]/80 backdrop-blur-md sticky top-0 z-30 border-b border-white/5">
 
         {{-- Botón menú móvil --}}
@@ -54,13 +58,21 @@
             </svg>
         </button>
 
-        {{-- 2. LIVEWIRE SEARCH BAR --}}
+        {{-- BARRA DE BÚSQUEDA (LIVEWIRE) --}}
         <div class="flex-1 flex justify-center px-4">
-            <livewire:search-bar />
+            {{-- Si tienes el componente Livewire creado, descomenta esta línea: --}}
+            {{-- <livewire:search-bar /> --}}
+
+            {{-- Si no usas livewire para buscar aquí, puedes poner un input falso visual: --}}
+            <div class="hidden md:block w-full max-w-md relative">
+                <input type="text" placeholder="Buscar..." class="w-full bg-[#1a1d24] border border-white/10 rounded-full py-2 px-4 pl-10 text-sm focus:outline-none focus:border-yellow-400 text-gray-300">
+                <svg class="w-4 h-4 text-gray-500 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
         </div>
 
-        {{-- Perfil de usuario --}}
+        {{-- PERFIL DE USUARIO --}}
         <div class="flex items-center gap-4 ml-auto">
+            {{-- Notificaciones --}}
             <button class="relative p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-white/5">
                 <div class="absolute top-2 right-2 w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -68,8 +80,15 @@
                 </svg>
             </button>
 
-            <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-black font-bold">
-                {{ substr(Auth::user()->name ?? 'U', 0, 1) }}
+            {{-- Avatar --}}
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <div class="text-sm font-bold text-white">{{ Auth::user()->name ?? 'Invitado' }}</div>
+                    <div class="text-xs text-gray-400 uppercase">{{ Auth::user()->role->name ?? 'User' }}</div>
+                </div>
+                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-yellow-400 to-yellow-600 flex items-center justify-center text-black font-bold border border-white/10 shadow-lg">
+                    {{ substr(Auth::user()->name ?? 'U', 0, 1) }}
+                </div>
             </div>
         </div>
     </header>
@@ -80,7 +99,6 @@
     </main>
 </div>
 
-{{-- 3. IMPORTANTE: SCRIPTS DE LIVEWIRE --}}
 @livewireScripts
 
 </body>

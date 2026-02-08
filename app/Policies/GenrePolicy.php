@@ -7,46 +7,28 @@ use App\Models\User;
 
 class GenrePolicy
 {
-    public function before(User $user, string $ability)
+    public function viewAny(?User $user): bool
     {
-        if ($user->role && $user->role->name === 'admin') {
-            return true;
-        }
-        return null;
+        return true; // Público
     }
 
-    public function viewAny(User $user): bool
+    public function view(?User $user, Genre $genre): bool
     {
-        return true;
-    }
-
-    public function view(User $user, Genre $genre): bool
-    {
-        return true;
+        return true; // Público
     }
 
     public function create(User $user): bool
     {
-        return $user->role->name === 'editor';
+        return $user->role->name === 'admin';
     }
 
     public function update(User $user, Genre $genre): bool
     {
-        return $user->role->name === 'editor';
+        return $user->role->name === 'admin';
     }
 
     public function delete(User $user, Genre $genre): bool
     {
-        return false;
-    }
-
-    public function restore(User $user, Genre $genre): bool
-    {
-        return false;
-    }
-
-    public function forceDelete(User $user, Genre $genre): bool
-    {
-        return false;
+        return $user->role->name === 'admin';
     }
 }

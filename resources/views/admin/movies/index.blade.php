@@ -16,6 +16,14 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-4 justify-end">
+
+                {{-- NUEVO BOTÓN PDF --}}
+                <a href="{{ route('admin.pdf.movies') }}" target="_blank" class="relative inline-flex items-center justify-center px-6 py-2.5 font-bold text-sm text-white transition-all duration-300 bg-red-600/90 border border-red-500/50 font-['Outfit'] rounded-xl hover:bg-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 -ml-1 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>{{ __('Descargar PDF') }}</span>
+                </a>
                 <a href="{{ route('movies.create') }}" class="relative inline-flex items-center justify-center px-6 py-2.5 font-bold text-sm text-black transition-all duration-300 bg-gradient-to-r from-yellow-400 to-yellow-500 font-['Outfit'] rounded-xl hover:from-yellow-300 hover:to-yellow-400 hover:shadow-[0_0_25px_rgba(250,204,21,0.6)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 whitespace-nowrap overflow-hidden group">
                     <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out"></span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 -ml-1 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -13,7 +13,9 @@ return new class extends Migration
     {
         $rolAdmin = \App\Models\Role::create(['name' => 'admin']);
         $rolUser  = \App\Models\Role::create(['name' => 'user']);
-        $rolMantenimiento = \App\Models\Role::create(['name' => 'manteinance']);
+        $moderador = \App\Models\Role::create(['name' => 'moderador']);
+        $editor = \App\Models\Role::create(['name' => 'editor']);
+        $guest = \App\Models\Role::create(['name' => 'guest']);
 
         $usuario = \App\Models\User::create(['name'=>'admin',
             'email'=>'juan@admin.es',

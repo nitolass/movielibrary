@@ -46,6 +46,7 @@ test('admin can create a genre', function () {
 });
 
 test('admin can see edit genre form', function () {
+    $this->withoutExceptionHandling();
     $admin = createAdminForGenre();
     $genre = Genre::factory()->create();
 

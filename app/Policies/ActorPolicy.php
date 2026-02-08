@@ -4,59 +4,34 @@ namespace App\Policies;
 
 use App\Models\Actor;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 
 class ActorPolicy
 {
-    /**
-     * El Admin tiene permiso total antes de comprobar nada más.
-     */
-    public function before(User $user, string $ability)
+    // ?User significa que el usuario puede ser NULL (invitado)
+    public function viewAny(?User $user): bool
     {
-        if ($user->role && $user->role->name === 'admin') {
-            return true;
-        }
-        return null;
+        return true; // Todo el mundo puede ver la lista
     }
 
-    public function viewAny(User $user): bool
+    public function view(?User $user, Actor $actor): bool
     {
-        // Todos los usuarios registrados pueden ver la lista
-        return true;
-    }
-
-    public function view(User $user, Actor $actor): bool
-    {
-        // Todos pueden ver el detalle
-        return true;
+        return true; // Todo el mundo puede ver un actor
     }
 
     public function create(User $user): bool
     {
-        // Admin ya pasó por 'before'.
-        // Aquí comprobamos si es Editor.
-        return $user->role->name === 'editor';
+        // Solo Admin o Editor (ajusta tu lógica aquí)
+        return $user->role->name === 'admin' || $user->role->name === 'editor';
     }
 
     public function update(User $user, Actor $actor): bool
     {
-        // El editor puede actualizar
-        return $user->role->name === 'editor';
+        return $user->role->name === 'admin' || $user->role->name === 'editor';
     }
 
     public function delete(User $user, Actor $actor): bool
     {
-        // El editor NO puede borrar. El admin ya pasó por 'before'.
-        // Por tanto, aquí devolvemos false.
-        return false;
-    }
-
-    public function restore(User $user, Actor $actor): bool
-    {
-        return false;
-    }
-
-    public function forceDelete(User $user, Actor $actor): bool
-    {
-        return false;
+        return $user->role->name === 'admin';
     }
 }

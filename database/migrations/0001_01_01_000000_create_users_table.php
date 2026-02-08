@@ -18,6 +18,7 @@ return new class extends Migration
             // Relación con roles (Asegúrate de que la tabla roles se cree antes)
             $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('set null');
             $table->rememberToken();
+            $table->timestamp('last_login_at')->nullable();
             $table->timestamps();
         });
 

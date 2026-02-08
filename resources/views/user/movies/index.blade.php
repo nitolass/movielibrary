@@ -3,32 +3,63 @@
 @section('content')
     <div class="container mx-auto px-4 py-8">
 
-        {{-- CABECERA Y BOTONES --}}
-        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        {{-- CABECERA Y HERRAMIENTAS --}}
+        <div class="flex flex-col xl:flex-row justify-between items-center mb-8 gap-6">
+
             {{-- Título --}}
-            <div>
+            <div class="text-center xl:text-left">
                 <h1 class="text-3xl font-bold text-white font-['Outfit']">{{ __('Catálogo') }} <span class="text-yellow-400">MovieHub</span></h1>
                 <p class="text-gray-400 text-sm mt-1">{{ __('Explora las últimas películas añadidas a la plataforma.') }}</p>
             </div>
 
-            {{-- GRUPO DE BOTONES (ORDENAR Y FILTRAR) --}}
-            <div class="flex items-center gap-2">
+            {{-- BARRA DE HERRAMIENTAS (Filtros y Ordenación) --}}
+            <div class="flex flex-wrap justify-center items-center gap-3">
 
-                {{-- 1. BOTÓN ORDENAR POR AÑO (NUEVO) --}}
-                <a href="{{ request()->fullUrlWithQuery(['sort' => request('sort') === 'recent' ? null : 'recent']) }}"
+                {{-- 1. FILTROS RÁPIDOS (SCOPES) --}}
+                <div class="flex bg-[#1a1d24] p-1 rounded-xl border border-white/10">
+
+                    {{-- Filtro: Populares --}}
+                    <a href="{{ request()->fullUrlWithQuery(['filter' => 'popular', 'sort' => null]) }}"
+                       class="px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2
+                       {{ request('filter') === 'popular' ? 'bg-yellow-400 text-black shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5' }}"
+                       title="{{ __('Más reseñadas') }}">
+                        🔥 <span class="hidden sm:inline">{{ __('Populares') }}</span>
+                    </a>
+
+                    {{-- Filtro: Aclamadas --}}
+                    <a href="{{ request()->fullUrlWithQuery(['filter' => 'top_rated', 'sort' => null]) }}"
+                       class="px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2
+                       {{ request('filter') === 'top_rated' ? 'bg-yellow-400 text-black shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5' }}"
+                       title="{{ __('Mejor valoradas') }}">
+                        ⭐ <span class="hidden sm:inline">{{ __('Aclamadas') }}</span>
+                    </a>
+
+                    {{-- Filtro: Clásicos --}}
+                    <a href="{{ request()->fullUrlWithQuery(['filter' => 'classics', 'sort' => null]) }}"
+                       class="px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2
+                       {{ request('filter') === 'classics' ? 'bg-yellow-400 text-black shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5' }}"
+                       title="{{ __('Anteriores al 2000') }}">
+                        🎞️ <span class="hidden sm:inline">{{ __('Clásicos') }}</span>
+                    </a>
+                </div>
+
+                {{-- Separador --}}
+                <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
+
+                {{-- 2. BOTÓN RECIENTES --}}
+                <a href="{{ request()->fullUrlWithQuery(['sort' => request('sort') === 'recent' ? null : 'recent', 'filter' => null]) }}"
                    class="group flex items-center gap-2 text-sm font-bold border rounded-xl py-2.5 px-5 transition-all shadow-sm hover:shadow-md
                    {{ request('sort') === 'recent'
                        ? 'bg-yellow-400/10 border-yellow-400 text-yellow-400'
                        : 'bg-gray-800/50 backdrop-blur-md border-white/10 text-gray-300 hover:bg-white/10 hover:border-yellow-400/30 hover:text-white'
                    }}">
-                    {{-- Icono Calendario --}}
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                     </svg>
                     <span>{{ __('Recientes') }}</span>
                 </a>
 
-                {{-- 2. BOTÓN DE FILTRAR (EXISTENTE) --}}
+                {{-- 3. MENÚ DE FILTROS AVANZADO (Géneros, Duración, País) --}}
                 <div x-data="{ open: false }" @click.outside="open = false" class="relative z-20">
 
                     <button @click="open = !open"
@@ -38,67 +69,88 @@
                         </svg>
                         <span>{{ __('Filtrar') }}</span>
 
-                        {{-- Contador --}}
-                        @if(request()->has('genres'))
+                        {{-- Contador de filtros activos --}}
+                        @php
+                            $activeFilters = count(request('genres', [])) + (request('country') ? 1 : 0) + (request('min_time') ? 1 : 0);
+                        @endphp
+
+                        @if($activeFilters > 0)
                             <span class="ml-1 bg-yellow-400 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-                                {{ count(request('genres')) }}
+                                {{ $activeFilters }}
                             </span>
                         @endif
 
-                        {{-- Flechita --}}
                         <svg class="w-4 h-4 ml-1 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
 
-                    {{-- Menú Desplegable --}}
+                    {{-- Dropdown ampliado --}}
                     <div x-show="open"
                          x-transition:enter="transition ease-out duration-100"
                          x-transition:enter-start="transform opacity-0 scale-95"
                          x-transition:enter-end="transform opacity-100 scale-100"
-                         class="absolute right-0 mt-2 w-64 bg-[#1a1d24] border border-white/10 rounded-xl shadow-2xl p-4"
+                         class="absolute right-0 mt-2 w-72 bg-[#1a1d24] border border-white/10 rounded-xl shadow-2xl p-5 z-50"
                          style="display: none;">
 
                         <form method="GET" action="{{ route('user.movies.index') }}">
 
-                            {{-- MANTENER PARÁMETROS: Búsqueda y Orden --}}
-                            @if(request('search'))
-                                <input type="hidden" name="search" value="{{ request('search') }}">
-                            @endif
-                            @if(request('sort'))
-                                <input type="hidden" name="sort" value="{{ request('sort') }}">
-                            @endif
+                            {{-- Mantener otros parámetros ocultos --}}
+                            @if(request('search')) <input type="hidden" name="search" value="{{ request('search') }}"> @endif
+                            @if(request('sort')) <input type="hidden" name="sort" value="{{ request('sort') }}"> @endif
+                            @if(request('filter')) <input type="hidden" name="filter" value="{{ request('filter') }}"> @endif
 
-                            <div class="mb-3 text-xs font-bold text-gray-500 uppercase tracking-widest border-b border-white/5 pb-2">
-                                {{ __('Géneros') }}
+                            {{-- 1. SECCIÓN GÉNEROS --}}
+                            <div class="mb-4">
+                                <div class="text-xs font-bold text-yellow-400 uppercase tracking-widest border-b border-white/10 pb-1 mb-2">
+                                    {{ __('Géneros') }}
+                                </div>
+                                <div class="space-y-1 max-h-40 overflow-y-auto custom-scrollbar pr-2">
+                                    @foreach($allGenres as $genre)
+                                        <label class="flex items-center space-x-3 cursor-pointer group hover:bg-white/5 p-1 rounded transition-colors">
+                                            <input type="checkbox" name="genres[]" value="{{ $genre->id }}"
+                                                   class="form-checkbox h-4 w-4 text-yellow-400 rounded border-gray-600 bg-gray-800 focus:ring-yellow-400 focus:ring-offset-gray-900"
+                                                {{ is_array(request('genres')) && in_array($genre->id, request('genres')) ? 'checked' : '' }}>
+                                            <span class="text-gray-300 text-xs group-hover:text-white transition-colors">{{ $genre->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
                             </div>
 
-                            {{-- Lista de Checkboxes --}}
-                            <div class="space-y-2 max-h-60 overflow-y-auto custom-scrollbar pr-2 mb-4">
-                                @foreach($allGenres as $genre)
-                                    <label class="flex items-center space-x-3 cursor-pointer group hover:bg-white/5 p-1 rounded transition-colors">
-                                        <input type="checkbox" name="genres[]" value="{{ $genre->id }}"
-                                               class="form-checkbox h-4 w-4 text-yellow-400 rounded border-gray-600 bg-gray-800 focus:ring-yellow-400 focus:ring-offset-gray-900 transition duration-150 ease-in-out"
-                                            {{ is_array(request('genres')) && in_array($genre->id, request('genres')) ? 'checked' : '' }}>
-                                        <span class="text-gray-300 text-sm group-hover:text-white transition-colors">{{ $genre->name }}</span>
-                                    </label>
-                                @endforeach
+                            {{-- 2. SECCIÓN DURACIÓN --}}
+                            <div class="mb-4">
+                                <div class="text-xs font-bold text-yellow-400 uppercase tracking-widest border-b border-white/10 pb-1 mb-2">
+                                    {{ __('Duración (min)') }}
+                                </div>
+                                <div class="flex gap-2">
+                                    <input type="number" name="min_time" placeholder="Min" value="{{ request('min_time') }}"
+                                           class="w-1/2 bg-gray-800 border border-gray-600 text-white text-xs rounded p-2 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none">
+                                    <input type="number" name="max_time" placeholder="Max" value="{{ request('max_time') }}"
+                                           class="w-1/2 bg-gray-800 border border-gray-600 text-white text-xs rounded p-2 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none">
+                                </div>
                             </div>
 
-                            {{-- Botones de Acción --}}
-                            <div class="flex justify-between items-center gap-2 pt-2 border-t border-white/5">
-                                <button type="button"
-                                        @click="$el.closest('form').querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false)"
-                                        class="text-xs text-gray-500 hover:text-white underline transition-colors">
-                                    {{ __('Limpiar') }}
-                                </button>
+                            {{-- 3. SECCIÓN PAÍS --}}
+                            <div class="mb-4">
+                                <div class="text-xs font-bold text-yellow-400 uppercase tracking-widest border-b border-white/10 pb-1 mb-2">
+                                    {{ __('País del Director') }}
+                                </div>
+                                <input type="text" name="country" placeholder="{{ __('Ej: USA, Spain...') }}" value="{{ request('country') }}"
+                                       class="w-full bg-gray-800 border border-gray-600 text-white text-xs rounded p-2 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none">
+                            </div>
 
-                                <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-black text-xs font-bold py-2 px-4 rounded-lg transition-colors shadow-lg shadow-yellow-400/20">
-                                    {{ __('Aplicar') }}
+                            {{-- BOTONES ACCIÓN --}}
+                            <div class="flex justify-between items-center gap-2 pt-3 border-t border-white/10 mt-2">
+                                <a href="{{ route('user.movies.index') }}" class="text-xs text-gray-500 hover:text-white underline transition-colors">
+                                    {{ __('Limpiar todo') }}
+                                </a>
+
+                                <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-black text-xs font-bold py-2 px-6 rounded-lg transition-colors shadow-lg shadow-yellow-400/20">
+                                    {{ __('Aplicar Filtros') }}
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
-            </div> {{-- Fin del Grupo de botones --}}
+            </div>
         </div>
 
         {{-- GRID DE PELÍCULAS --}}
@@ -157,7 +209,7 @@
                 </div>
                 <h3 class="text-xl font-bold text-white mb-2">{{ __('No se encontraron películas') }}</h3>
                 <p class="text-gray-400">{{ __('Intenta ajustar tus filtros o búsqueda.') }}</p>
-                @if(request('genres') || request('search') || request('sort'))
+                @if(request('genres') || request('search') || request('sort') || request('filter') || request('country') || request('min_time'))
                     <a href="{{ route('user.movies.index') }}" class="mt-4 text-yellow-400 hover:text-yellow-300 text-sm font-bold underline">
                         {{ __('Borrar filtros') }}
                     </a>

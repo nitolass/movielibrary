@@ -24,13 +24,16 @@ class UserReviews extends Component
     public function render()
     {
         $reviews = Review::where('user_id', Auth::id())
-            ->with('movie')
+            ->with('movie') // Carga impaciente para optimizar
             ->orderBy('created_at', 'desc')
             ->paginate(6);
 
-        return view('livewire.user-reviews', ['reviews' => $reviews], [
+        // CORRECCIÓN AQUÍ:
+        // 1. Solo pasamos el array una vez.
+        // 2. Usamos 'layouts.panel' para que se vea el sidebar y header correctos.
+        return view('livewire.user-reviews', [
             'reviews' => $reviews
-        ])->layout('layouts.app');
+        ])->layout('layouts.panel');
     }
 
     public function edit($id)
@@ -55,6 +58,8 @@ class UserReviews extends Component
         ]);
 
         $this->reset(['rating', 'content', 'review_id', 'isEditing']);
+
+        // Mensaje flash para que la vista lo muestre
         session()->flash('message', 'Reseña actualizada correctamente.');
     }
 
@@ -67,6 +72,7 @@ class UserReviews extends Component
     {
         $review = Review::where('user_id', Auth::id())->findOrFail($id);
         $review->delete();
+
         session()->flash('message', 'Reseña eliminada.');
     }
 }

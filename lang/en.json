@@ -302,5 +302,22 @@
     "colecciona cine.": "collect cinema.",
     "Tu biblioteca personal de películas. Sin distracciones, solo cine.": "Your personal movie library. No distractions, just cinema.",
     "Explorar Catálogo": "Explore Catalog",
-    "Ya tengo cuenta": "I already have an account"
+    "Ya tengo cuenta": "I already have an account",
+    "Populares": "Popular",
+    "Más reseñadas": "Most reviewed",
+    "Aclamadas": "Acclaimed",
+    "Mejor valoradas": "Top rated",
+    "Clásicos": "Classics",
+    "Anteriores al 2000": "Before 2000",
+    "Informe de Estado": "Status Report",
+    "Genera un análisis completo del catálogo: estadísticas, tops y distribución por géneros.": "Generates a complete analysis of the catalog: statistics, tops, and genre distribution.",
+    "Resumen de actividad y catálogo de MovieHub": "MovieHub activity and catalog summary",
+    "Nota Media": "Average Score",
+    "Top 5 Mejor Valoradas": "Top 5 Highest Rated",
+    "Top 5 Más Populares": "Top 5 Most Popular",
+    "Distribución del Catálogo por Género": "Catalog Distribution by Genre",
+    "pelis": "movies",
+    "Descargar Ficha": "Download Sheet",
+    "Volver a Actores": "Back to Actors",
+    "Descargar PDF": "Download PDF"
 }

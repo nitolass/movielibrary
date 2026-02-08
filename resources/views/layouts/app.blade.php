@@ -100,7 +100,7 @@
                             <a href="{{ route('user.favorites') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">❤️ {{ __('Favoritos') }}</a>
                             <a href="{{ route('user.watch_later') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">⏱️ {{ __('Ver tarde') }}</a>
                             <a href="{{ route('user.watched') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">👁️ {{ __('Vista') }}</a>
-                            <a href="{{ route('user.rated') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">⭐ {{ __('Reseñas') }}</a>
+                            <a href="{{ route('user.reviews.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">⭐ {{ __('Reseñas') }}</a>
                         </div>
 
                         <div class="py-2">

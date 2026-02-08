@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
+            $table->text('description');
             $table->foreignId('director_id')->constrained('directors')
                 ->onDelete('cascade');
             $table->string('year', 4);
