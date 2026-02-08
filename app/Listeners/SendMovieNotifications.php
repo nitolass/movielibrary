@@ -2,29 +2,24 @@
 
 namespace App\Listeners;
 
+use App\Events\MovieCreated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Events\MovieCreated;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewMovieMail;
 
-class SendEmailNotificationToSubscribers
+class SendMovieNotifications implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
+    use InteractsWithQueue;
 
-    /**
-     * Handle the event.
-     */
     public function handle(MovieCreated $event): void
     {
+        // 1. Enviar Email
         Mail::to('suscriptores@ejemplo.com')->send(new NewMovieMail($event->movie));
-        Log::info(" EMAIL MASIVO: Notificando a suscriptores sobre '{$event->movie->title}'");
+        Log::info("EMAIL: Notificación enviada para la película '{$event->movie->title}'");
+
+        // 2. Notificar Telegram (Simulado)
+        Log::info("TELEGRAM: Se ha estrenado '{$event->movie->title}' en el canal oficial.");
     }
 }

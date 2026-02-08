@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
-    <title>Movie Library Export</title>
+    <title>{{ __('Exportación de Biblioteca') }}</title>
     <style>
         /* Estilos Generales */
         body { font-family: 'Helvetica', sans-serif; color: #333; line-height: 1.5; }
@@ -34,17 +34,17 @@
     <table class="w-100">
         <tr>
             <td style="font-size: 20px; font-weight: bold; color: #e74c3c;">
-                🎬 MyMovieLibrary
+                🎬 MovieHub
             </td>
             <td class="text-right">
-                Usuario: {{ auth()->user()->name ?? 'Invitado' }}
+                {{ __('Usuario') }}: {{ auth()->user()->name ?? __('Invitado') }}
             </td>
         </tr>
     </table>
 </header>
 
 <footer>
-    Generado automáticamente el {{ date('d/m/Y H:i') }}
+    {{ __('Generado automáticamente el') }} {{ date('d/m/Y H:i') }}
 </footer>
 
 <main>

@@ -40,20 +40,18 @@
             </a>
         </div>
 
-
-
         {{-- 3. MENÚ DE USUARIO --}}
         <div class="flex items-center gap-4">
 
             @guest
                 {{-- INVITADOS --}}
                 <a href="{{ route('login') }}" class="px-5 py-2.5 rounded-xl text-sm font-bold bg-gray-800/80 text-white border border-gray-700 hover:bg-yellow-500 hover:text-black hover:border-yellow-400 transition-all duration-300">
-                    Entrar
+                    {{ __('Iniciar Sesión') }}
                 </a>
 
                 @if (Route::has('register'))
                     <a href="{{ route('register') }}" class="hidden sm:block px-5 py-2.5 rounded-xl text-sm font-bold bg-white text-black hover:bg-gray-200 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-                        Registro
+                        {{ __('Registrarse') }}
                     </a>
                 @endif
 
@@ -92,29 +90,29 @@
                         @if(Auth::user()->role_id == 1)
                             <div class="px-2 py-2">
                                 <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-lg text-sm text-yellow-400 font-bold hover:bg-yellow-500/10 hover:text-yellow-300 transition-colors">
-                                    ⚡ Panel de Admin
+                                    ⚡ {{ __('Panel de Control') }}
                                 </a>
                             </div>
                         @endif
 
                         <div class="py-2">
-                            <div class="px-4 text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1">Mi Biblioteca</div>
-                            <a href="{{ route('user.favorites') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">❤️ Favoritos</a>
-                            <a href="{{ route('user.watch_later') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">⏱️ Ver más tarde</a>
-                            <a href="{{ route('user.watched') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">👁️ Historial</a>
-                            <a href="{{ route('user.rated') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">⭐ Mis Reseñas</a>
+                            <div class="px-4 text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1">{{ __('Biblioteca') }}</div>
+                            <a href="{{ route('user.favorites') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">❤️ {{ __('Favoritos') }}</a>
+                            <a href="{{ route('user.watch_later') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">⏱️ {{ __('Ver tarde') }}</a>
+                            <a href="{{ route('user.watched') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">👁️ {{ __('Vista') }}</a>
+                            <a href="{{ route('user.rated') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">⭐ {{ __('Reseñas') }}</a>
                         </div>
 
                         <div class="py-2">
                             <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
-                                ⚙️ Configuración
+                                ⚙️ {{ __('Configuración') }}
                             </a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <a href="{{ route('logout') }}"
                                    onclick="event.preventDefault(); this.closest('form').submit();"
                                    class="block px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors">
-                                    🚪 Cerrar Sesión
+                                    🚪 {{ __('Cerrar Sesión') }}
                                 </a>
                             </form>
                         </div>
@@ -142,10 +140,10 @@
 
 <footer class="py-8 text-center text-gray-600 text-xs border-t border-white/5 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-6">
-        <span>&copy; {{ date('Y') }} MovieHub Inc. Todos los derechos reservados.</span>
+        <span>&copy; {{ date('Y') }} MovieHub Inc. {{ __('Todos los derechos reservados.') }}</span>
         <div class="mt-2 md:mt-0 flex gap-4">
-            <a href="#" class="hover:text-gray-400">Privacidad</a>
-            <a href="#" class="hover:text-gray-400">Términos</a>
+            <a href="#" class="hover:text-gray-400">{{ __('Privacidad') }}</a>
+            <a href="#" class="hover:text-gray-400">{{ __('Términos') }}</a>
         </div>
     </div>
 </footer>

@@ -17,7 +17,7 @@
                     </div>
                 </div>
 
-                <h2 class="text-xl font-bold text-white">Zona Segura</h2>
+                <h2 class="text-xl font-bold text-white">{{ __('Zona Segura') }}</h2>
                 <p class="text-sm text-gray-400 mt-2 leading-relaxed px-2">
                     {{ __('Esta es una área segura de la aplicación. Por favor, confirma tu contraseña para continuar.') }}
                 </p>
@@ -27,7 +27,7 @@
                 @csrf
 
                 <div x-data="{ show: false }">
-                    <label for="password" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Contraseña</label>
+                    <label for="password" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">{{ __('Contraseña') }}</label>
                     <div class="relative group">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-yellow-400 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -35,7 +35,7 @@
                             </svg>
                         </div>
 
-                        <input id="password" :type="show ? 'text' : 'password'" name="password" required autocomplete="current-password" placeholder="Tu contraseña actual"
+                        <input id="password" :type="show ? 'text' : 'password'" name="password" required autocomplete="current-password" placeholder="{{ __('Tu contraseña actual') }}"
                                class="block w-full pl-12 pr-12 py-3 bg-[#0f1115] border border-gray-700 text-gray-100 rounded-xl focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 focus:outline-none transition-all placeholder-gray-600 shadow-inner sm:text-sm">
 
                         <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-white transition-colors focus:outline-none">
@@ -49,11 +49,11 @@
                 <div class="pt-2 flex flex-col gap-3">
                     <button type="submit" class="group relative w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl text-sm font-black text-black bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-300 hover:to-yellow-400 shadow-lg hover:shadow-yellow-400/50 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all duration-300 uppercase tracking-widest overflow-hidden">
                         <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out"></span>
-                        <span class="relative z-10">Confirmar</span>
+                        <span class="relative z-10">{{ __('Confirmar') }}</span>
                     </button>
 
                     <a href="javascript:history.back()" class="text-center text-xs text-gray-500 hover:text-white py-2 transition-colors">
-                        Cancelar y volver
+                        {{ __('Cancelar y volver') }}
                     </a>
                 </div>
             </form>

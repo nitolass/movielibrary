@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\MovieCreated;
 use App\Http\Controllers\Admin\Controller;
 use App\Models\Movie;
 use Illuminate\Http\Request;
@@ -28,6 +29,8 @@ class MovieController extends Controller
         }
 
         $movie = Movie::create($validated);
+
+        MovieCreated::dispatch($movie);
 
         return response()->json([
             'message' => 'Película creada',

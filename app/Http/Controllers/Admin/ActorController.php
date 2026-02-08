@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\ActorCreated;
 use App\Http\Requests\StoreActorRequest;
 use App\Http\Requests\UpdateActorRequest;
 use App\Jobs\AuditLogJob;
 use App\Models\Actor;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate; // <--- Importante
+use Illuminate\Support\Facades\Gate;
 
 class ActorController
 {
@@ -35,7 +36,8 @@ class ActorController
 
         $actor = Actor::create($data);
 
-        //Job
+        //Job y event
+        ActorCreated::dispatch($actor);
         AuditLogJob::dispatch("ACTOR: Se ha creado el actor '{$actor->name}'");
 
         return redirect()->route('actors.index')->with('success', 'Actor creado correctamente.');

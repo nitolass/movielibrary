@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Listado de Usuarios</title>
+    <title>{{ __('Listado de Usuarios') }}</title>
     <style>
         body { font-family: sans-serif; color: #333; }
         h1 { text-align: center; color: #444; margin-bottom: 30px; }
@@ -13,17 +13,17 @@
     </style>
 </head>
 <body>
-<h1>Listado Oficial de Usuarios</h1>
-<p>Fecha de emisión: {{ date('d/m/Y') }}</p>
+<h1>{{ __('Listado Oficial de Usuarios') }}</h1>
+<p>{{ __('Fecha de emisión') }}: {{ date('d/m/Y') }}</p>
 
 <table>
     <thead>
     <tr>
         <th>ID</th>
-        <th>Nombre</th>
-        <th>Email</th>
-        <th>Rol</th>
-        <th>Fecha Registro</th>
+        <th>{{ __('Nombre') }}</th>
+        <th>{{ __('Email') }}</th>
+        <th>{{ __('Rol') }}</th>
+        <th>{{ __('Fecha Registro') }}</th>
     </tr>
     </thead>
     <tbody>

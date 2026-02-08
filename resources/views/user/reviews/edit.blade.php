@@ -11,7 +11,7 @@
 
                 <div class="mb-6">
                     <h3 class="text-lg font-bold text-white">
-                        Película: <span class="text-yellow-400">{{ $review->movie->title }}</span>
+                        {{ __('Película') }}: <span class="text-yellow-400">{{ $review->movie->title }}</span>
                     </h3>
                 </div>
 
@@ -23,19 +23,17 @@
                         <x-input-label for="rating" :value="__('Puntuación')" class="text-gray-300" />
 
                         <x-select id="rating" name="rating" class="mt-1 block w-full">
-                            <option value="5" {{ $review->rating == 5 ? 'selected' : '' }}>⭐⭐⭐⭐⭐ (5) - Excelente</option>
-                            <option value="4" {{ $review->rating == 4 ? 'selected' : '' }}>⭐⭐⭐⭐ (4) - Muy buena</option>
-                            <option value="3" {{ $review->rating == 3 ? 'selected' : '' }}>⭐⭐⭐ (3) - Regular</option>
-                            <option value="2" {{ $review->rating == 2 ? 'selected' : '' }}>⭐⭐ (2) - Mala</option>
-                            <option value="1" {{ $review->rating == 1 ? 'selected' : '' }}>⭐ (1) - Terrible</option>
+                            <option value="5" {{ $review->rating == 5 ? 'selected' : '' }}>⭐⭐⭐⭐⭐ (5) - {{ __('Excelente') }}</option>
+                            <option value="4" {{ $review->rating == 4 ? 'selected' : '' }}>⭐⭐⭐⭐ (4) - {{ __('Muy buena') }}</option>
+                            <option value="3" {{ $review->rating == 3 ? 'selected' : '' }}>⭐⭐⭐ (3) - {{ __('Normal') }}</option>
+                            <option value="2" {{ $review->rating == 2 ? 'selected' : '' }}>⭐⭐ (2) - {{ __('Mala') }}</option>
+                            <option value="1" {{ $review->rating == 1 ? 'selected' : '' }}>⭐ (1) - {{ __('Terrible') }}</option>
                         </x-select>
                         <x-input-error :messages="$errors->get('rating')" class="mt-2" />
                     </div>
 
-
-
                     <div>
-                        <x-input-label for="content" :value="__('Tu Opinión')" class="text-gray-300" />
+                        <x-input-label for="content" :value="__('Tu opinión')" class="text-gray-300" />
 
                         <x-textarea id="content" name="content" rows="4" class="mt-1 block w-full" required>
                             {{ old('content', $review->content) }}
@@ -43,12 +41,15 @@
                         <x-input-error :messages="$errors->get('content')" class="mt-2" />
                     </div>
 
+                    {{-- Checkbox de Spoilers (Opcional si lo tienes en tu DB, si no, puedes quitarlo) --}}
+                    {{--
                     <div class="block">
                         <label for="spoilers" class="inline-flex items-center">
-                            <x-checkbox id="spoilers" name="spoilers" value="1" />
+                            <x-checkbox id="spoilers" name="spoilers" value="1" :checked="$review->spoilers" />
                             <span class="ml-2 text-sm text-gray-400">{{ __('Esta reseña contiene Spoilers') }}</span>
                         </label>
                     </div>
+                    --}}
 
                     <div class="flex items-center justify-end gap-4 mt-4">
                         <a href="{{ route('user.movies.show', $review->movie_id) }}" class="text-sm text-gray-400 hover:text-white underline">

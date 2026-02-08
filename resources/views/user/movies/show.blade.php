@@ -5,7 +5,7 @@
 
         {{-- Botón Volver --}}
         <a href="{{ route('user.movies.index') }}" class="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors">
-            &larr; Volver al catálogo
+            &larr; {{ __('Volver al catálogo') }}
         </a>
 
         {{-- 1. FICHA PRINCIPAL DE LA PELÍCULA --}}
@@ -15,9 +15,9 @@
                 {{-- COLUMNA 1: PÓSTER --}}
                 <div class="relative aspect-[2/3] md:aspect-auto">
                     @if($movie->poster)
-                        <img src="{{ asset('storage/' . $movie->poster) }}" alt=" w-full h-full object-cover">
+                        <img src="{{ asset('storage/' . $movie->poster) }}" alt="{{ $movie->title }}" class="w-full h-full object-cover">
                     @else
-                        <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500 font-bold">Sin Imagen</div>
+                        <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500 font-bold">{{ __('Sin Imagen') }}</div>
                     @endif
                 </div>
 
@@ -43,27 +43,54 @@
 
                         {{-- Sinopsis --}}
                         <div class="mb-8">
-                            <h3 class="text-lg font-bold text-white mb-2">Sinopsis</h3>
+                            <h3 class="text-lg font-bold text-white mb-2">{{ __('Sinopsis') }}</h3>
                             <p class="text-gray-400 leading-relaxed">
                                 {{ $movie->description }}
                             </p>
                         </div>
 
-                        {{-- Director --}}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                        {{-- Grid: Director y Duración --}}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8 border-b border-white/5 pb-6">
                             <div>
-                                <h4 class="text-sm font-bold text-gray-500 uppercase mb-1">Director</h4>
-                                <p class="text-white">{{ $movie->director->name ?? 'Desconocido' }}</p>
+                                <h4 class="text-sm font-bold text-gray-500 uppercase mb-1">{{ __('Director') }}</h4>
+                                <p class="text-white">{{ $movie->director->name ?? __('Desconocido') }}</p>
                             </div>
                             <div>
-                                <h4 class="text-sm font-bold text-gray-500 uppercase mb-1">Duración</h4>
+                                <h4 class="text-sm font-bold text-gray-500 uppercase mb-1">{{ __('Duración') }}</h4>
                                 <p class="text-white">{{ $movie->duration ?? '---' }} min</p>
                             </div>
                         </div>
+
+                        {{-- ✅ SECCIÓN: ACTORES (REPARTO) --}}
+                        @if($movie->actors->isNotEmpty())
+                            <div class="mb-6">
+                                <h4 class="text-sm font-bold text-gray-500 uppercase mb-3">{{ __('Reparto Principal') }}</h4>
+                                <div class="flex flex-wrap gap-3">
+                                    @foreach($movie->actors as $actor)
+                                        <div class="flex items-center gap-3 bg-white/5 border border-white/5 pr-4 rounded-full overflow-hidden hover:bg-white/10 transition-colors group">
+                                            {{-- Foto del Actor --}}
+                                            @if($actor->photo)
+                                                <img src="{{ asset('storage/' . $actor->photo) }}" class="w-10 h-10 object-cover group-hover:scale-110 transition-transform">
+                                            @else
+                                                <div class="w-10 h-10 bg-gray-700 flex items-center justify-center text-xs text-gray-400 font-bold">
+                                                    {{ substr($actor->name, 0, 1) }}
+                                                </div>
+                                            @endif
+
+                                            {{-- Nombre --}}
+                                            <span class="text-sm font-bold text-gray-300 group-hover:text-yellow-400 transition-colors">
+                                                {{ $actor->name }}
+                                            </span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
                     </div>
 
                     {{-- ACCIONES DE USUARIO --}}
-                    <div class="flex flex-wrap gap-4 pt-6 border-t border-white/5 items-center">
+                    <div class="flex flex-wrap gap-4 pt-6 border-t border-white/5 items-center mt-auto">
                         @auth
                             @php
                                 $user = auth()->user();
@@ -79,7 +106,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ $isFavorite ? 'fill-current' : 'group-hover:text-red-500' }}" fill="{{ $isFavorite ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                     </svg>
-                                    <span>{{ $isFavorite ? 'Quitar' : 'Favoritos' }}</span>
+                                    <span>{{ $isFavorite ? __('Quitar') : __('Favoritos') }}</span>
                                 </button>
                             </form>
 
@@ -90,7 +117,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ $isWatchLater ? 'fill-current' : 'group-hover:text-yellow-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    <span>{{ $isWatchLater ? 'En lista' : 'Ver tarde' }}</span>
+                                    <span>{{ $isWatchLater ? __('En lista') : __('Ver tarde') }}</span>
                                 </button>
                             </form>
 
@@ -102,12 +129,12 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
-                                    <span>{{ $isWatched ? 'Vista' : 'Marcar Vista' }}</span>
+                                    <span>{{ $isWatched ? __('Vista') : __('Marcar Vista') }}</span>
                                 </button>
                             </form>
                         @else
                             <div class="text-gray-400 text-sm italic bg-white/5 px-4 py-2 rounded-lg border border-white/5">
-                                <a href="{{ route('login') }}" class="text-yellow-400 font-bold hover:underline">Inicia sesión</a> para guardar esta película.
+                                <a href="{{ route('login') }}" class="text-yellow-400 font-bold hover:underline">{{ __('Inicia sesión') }}</a> {{ __('para guardar esta película.') }}
                             </div>
                         @endauth
                     </div>
@@ -118,39 +145,39 @@
         {{-- 2. SECCIÓN DE RESEÑAS --}}
         <div class="mt-8 border-t border-white/10 pt-8">
             <h3 class="text-3xl font-bold text-white mb-8 flex items-center gap-2">
-                Reseñas de la Comunidad <span class="text-yellow-400">.</span>
+                {{ __('Reseñas de la Comunidad') }} <span class="text-yellow-400">.</span>
             </h3>
 
             {{-- FORMULARIO DE RESEÑA (Solo Auth) --}}
             @auth
                 <div class="bg-[#16181c] border border-white/5 p-6 rounded-2xl mb-10 shadow-lg">
-                    <h4 class="text-lg font-bold text-yellow-400 mb-4">¿Qué te ha parecido?</h4>
+                    <h4 class="text-lg font-bold text-yellow-400 mb-4">{{ __('¿Qué te ha parecido?') }}</h4>
 
                     <form action="{{ route('reviews.store', $movie->id) }}" method="POST">
                         @csrf
                         <div class="flex flex-col md:flex-row gap-4 mb-4">
                             {{-- Estrellas --}}
                             <div class="w-full md:w-1/4">
-                                <label class="block text-gray-400 text-sm font-bold mb-2">Puntuación</label>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">{{ __('Puntuación') }}</label>
                                 <select name="rating" class="w-full bg-[#0f1115] text-white border border-gray-700 rounded-xl p-3 focus:border-yellow-400 outline-none transition-colors">
-                                    <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
-                                    <option value="4">⭐⭐⭐⭐ Muy buena</option>
-                                    <option value="3">⭐⭐⭐ Normal</option>
-                                    <option value="2">⭐⭐ Mala</option>
-                                    <option value="1">⭐ Terrible</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ {{ __('Excelente') }}</option>
+                                    <option value="4">⭐⭐⭐⭐ {{ __('Muy buena') }}</option>
+                                    <option value="3">⭐⭐⭐ {{ __('Normal') }}</option>
+                                    <option value="2">⭐⭐ {{ __('Mala') }}</option>
+                                    <option value="1">⭐ {{ __('Terrible') }}</option>
                                 </select>
                             </div>
 
                             {{-- Comentario --}}
                             <div class="w-full md:w-3/4">
-                                <label class="block text-gray-400 text-sm font-bold mb-2">Tu opinión</label>
-                                <textarea name="content" rows="3" placeholder="Comparte tu opinión con la comunidad..." class="w-full bg-[#0f1115] text-white border border-gray-700 rounded-xl p-3 focus:border-yellow-400 outline-none transition-colors" required></textarea>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">{{ __('Tu opinión') }}</label>
+                                <textarea name="content" rows="3" placeholder="{{ __('Comparte tu opinión con la comunidad...') }}" class="w-full bg-[#0f1115] text-white border border-gray-700 rounded-xl p-3 focus:border-yellow-400 outline-none transition-colors" required></textarea>
                             </div>
                         </div>
 
                         <div class="text-right">
                             <button type="submit" class="px-6 py-2 bg-yellow-400 text-black font-bold rounded-xl hover:bg-yellow-500 transition-all shadow-[0_0_15px_rgba(250,204,21,0.3)] transform hover:-translate-y-0.5">
-                                Publicar Reseña
+                                {{ __('Publicar Reseña') }}
                             </button>
                         </div>
                     </form>
@@ -158,7 +185,7 @@
             @else
                 <div class="bg-[#16181c] border border-white/5 p-8 rounded-2xl text-center mb-10">
                     <p class="text-gray-400 text-lg">
-                        Debes <a href="{{ route('login') }}" class="text-yellow-400 font-bold hover:underline">iniciar sesión</a> para escribir una reseña.
+                        {{ __('Debes') }} <a href="{{ route('login') }}" class="text-yellow-400 font-bold hover:underline">{{ __('iniciar sesión') }}</a> {{ __('para escribir una reseña.') }}
                     </p>
                 </div>
             @endauth
@@ -188,7 +215,7 @@
                     </div>
                 @empty
                     <div class="col-span-full py-12 text-center border border-dashed border-white/10 rounded-2xl">
-                        <p class="text-gray-500 italic">No hay reseñas para esta película aún. ¡Sé el primero!</p>
+                        <p class="text-gray-500 italic">{{ __('No hay reseñas para esta película aún. ¡Sé el primero!') }}</p>
                     </div>
                 @endforelse
             </div>

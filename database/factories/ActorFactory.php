@@ -17,6 +17,7 @@ class ActorFactory extends Factory
             'birth_year' => $this->faker->year,
             'nationality' => $this->faker->country,
             'photo' => null,
+            'score' => $this->faker->randomFloat(1, 0, 10),
         ];
     }
 }

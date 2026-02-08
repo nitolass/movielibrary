@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ActorCreated;
 use App\Http\Controllers\Admin\Controller;
 use App\Jobs\AuditLogJob;
 use App\Models\Actor;
@@ -37,6 +38,9 @@ class ActorController extends Controller
         ]);
 
         $actor = Actor::create($validated);
+
+
+        ActorCreated::dispatch($actor);
         AuditLogJob::dispatch("API: Actor '{$actor->name}' creado por " . $request->user()->email);
         return new ActorResource($actor);
     }

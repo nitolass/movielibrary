@@ -16,6 +16,7 @@ class DirectorFactory extends Factory
             'birth_date' => $this->faker->year(),
             'nationality' => $this->faker->country(),
             'photo' => null,
+            'score' => $this->faker->randomFloat(1, 0, 10),
         ];
     }
 }

@@ -18,6 +18,7 @@
                 'duration'    => $this->faker->numberBetween(80, 210),
                 'director_id' => Director::factory(),
                 'poster'      => null,
+                'score'       => $this->faker->randomFloat(1, 0, 10),
             ];
         }
     }

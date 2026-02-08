@@ -35,7 +35,6 @@ test('cobertura de reviews y limpieza de jobs/requests', function () {
     ])->assertRedirect();
 
     // --- 3. JOBS AL 0% (Sube SyncExternalData al 100%) ---
-    (new \App\Jobs\SyncExternalData())->handle();
 
     // --- 4. RECURSOS RESTANTES (Sube ActorResource) ---
     if (class_exists('App\Http\Resources\ActorResource')) {

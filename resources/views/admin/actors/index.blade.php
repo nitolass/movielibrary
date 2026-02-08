@@ -3,9 +3,9 @@
 @section('content')
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-white font-['Outfit']">Actores</h1>
+            <h1 class="text-3xl font-bold text-white font-['Outfit']">{{ __('Actores') }}</h1>
             <a href="{{ route('actors.create') }}" class="px-5 py-2.5 bg-yellow-400 text-black font-bold rounded-xl hover:bg-yellow-300 shadow-[0_0_15px_rgba(250,204,21,0.4)] transition-all">
-                + Crear Actor
+                + {{ __('Crear') }} {{ __('Actor') }}
             </a>
         </div>
 
@@ -14,9 +14,10 @@
                 <thead>
                 <tr class="bg-white/5 text-gray-400 uppercase text-xs font-bold tracking-wider border-b border-white/5">
                     <th class="py-4 px-6">ID</th>
-                    <th class="py-4 px-6">Nombre</th>
-                    <th class="py-4 px-6">Año Nac.</th> <th class="py-4 px-6">Nacionalidad</th>
-                    <th class="py-4 px-6 text-center">Acciones</th>
+                    <th class="py-4 px-6">{{ __('Nombre') }}</th>
+                    <th class="py-4 px-6">{{ __('Año Nac.') }}</th>
+                    <th class="py-4 px-6">{{ __('Nacionalidad') }}</th>
+                    <th class="py-4 px-6 text-center">{{ __('Acciones') }}</th>
                 </tr>
                 </thead>
                 <tbody class="text-gray-300 text-sm">
@@ -32,13 +33,13 @@
 
                         <td class="py-4 px-6 flex justify-center gap-2">
                             <a href="{{ route('actors.edit', $actor->id) }}" class="p-2 bg-gray-800 text-blue-400 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
-                                Editar
+                                {{ __('Editar') }}
                             </a>
-                            <form action="{{ route('actors.destroy', $actor->id) }}" method="POST" onsubmit="return confirm('¿Eliminar actor?');">
+                            <form action="{{ route('actors.destroy', $actor->id) }}" method="POST" onsubmit="return confirm('{{ __('¿Estás seguro de eliminar?') }}');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="p-2 bg-gray-800 text-red-400 rounded-lg hover:bg-red-600 hover:text-white transition-all">
-                                    Eliminar
+                                    {{ __('Eliminar') }}
                                 </button>
                             </form>
                         </td>

@@ -54,7 +54,7 @@
             </svg>
         </button>
 
-        {{-- 2. AQUÍ ESTABA EL ERROR: HEMOS PUESTO TU COMPONENTE LIVEWIRE REAL --}}
+        {{-- 2. LIVEWIRE SEARCH BAR --}}
         <div class="flex-1 flex justify-center px-4">
             <livewire:search-bar />
         </div>

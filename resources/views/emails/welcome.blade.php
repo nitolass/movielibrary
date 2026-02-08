@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Bienvenido a MovieApp</title>
+    <title>{{ __('Bienvenido a MovieApp') }}</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #16181c; font-family: 'Arial', sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #16181c; padding: 40px 0;">
@@ -16,19 +16,19 @@
                 </tr>
                 <tr>
                     <td style="padding: 40px; text-align: center;">
-                        <h2 style="color: #ffffff; font-size: 22px; margin-bottom: 20px;">¡Bienvenido, {{ $user->name }}! 👋</h2>
+                        <h2 style="color: #ffffff; font-size: 22px; margin-bottom: 20px;">{{ __('Bienvenido') }}, {{ $user->name }}! 👋</h2>
                         <p style="color: #9ca3af; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
-                            Gracias por unirte a nuestra comunidad. Estamos encantados de tenerte aquí. Prepárate para descubrir, calificar y organizar las mejores películas del mundo.
+                            {{ __('Gracias por unirte a nuestra comunidad. Estamos encantados de tenerte aquí. Prepárate para descubrir, calificar y organizar las mejores películas del mundo.') }}
                         </p>
 
                         <a href="{{ url('/') }}" style="background-color: #eab308; color: #000000; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">
-                            Ir al Catálogo
+                            {{ __('Ir al Catálogo') }}
                         </a>
                     </td>
                 </tr>
                 <tr>
                     <td style="padding: 20px; text-align: center; border-top: 1px solid #333; color: #555; font-size: 12px;">
-                        &copy; {{ date('Y') }} MovieHub. Todos los derechos reservados.
+                        &copy; {{ date('Y') }} MovieHub. {{ __('Todos los derechos reservados.') }}
                     </td>
                 </tr>
             </table>

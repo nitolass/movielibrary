@@ -10,24 +10,24 @@
                 </svg>
             </div>
 
-            <h2 class="text-3xl font-bold text-white mb-3 font-['Outfit']">Únete a MovieHub</h2>
+            <h2 class="text-3xl font-bold text-white mb-3 font-['Outfit']">{{ __('Únete a MovieHub') }}</h2>
             <p class="text-gray-400 mb-8">
-                Necesitas iniciar sesión para añadir películas a tus listas, valorarlas o marcarlas como vistas. ¡Es gratis!
+                {{ __('Necesitas iniciar sesión para añadir películas a tus listas, valorarlas o marcarlas como vistas. ¡Es gratis!') }}
             </p>
 
             <div class="space-y-4">
                 <a href="{{ route('login') }}" class="block w-full py-3.5 px-6 bg-yellow-400 hover:bg-yellow-300 text-black font-bold rounded-xl transition-all shadow-[0_0_15px_rgba(250,204,21,0.4)]">
-                    Iniciar Sesión
+                    {{ __('Iniciar Sesión') }}
                 </a>
 
                 <a href="{{ route('register') }}" class="block w-full py-3.5 px-6 bg-transparent border border-gray-600 text-white font-bold rounded-xl hover:bg-white/5 transition-all">
-                    Crear una cuenta
+                    {{ __('Crear una cuenta') }}
                 </a>
             </div>
 
             <div class="mt-8 border-t border-white/5 pt-6">
                 <a href="{{ route('movies.index') }}" class="text-gray-500 hover:text-white text-sm transition-colors">
-                    &larr; Volver al catálogo
+                    &larr; {{ __('Volver al catálogo') }}
                 </a>
             </div>
         </div>

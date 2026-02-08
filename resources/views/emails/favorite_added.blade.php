@@ -12,9 +12,9 @@
                     <td style="padding: 40px; text-align: center;">
                         <h1 style="font-size: 40px; margin: 0 0 20px 0;">❤️</h1>
 
-                        <h2 style="color: #ffffff; margin-bottom: 10px;">¡Guardada en Favoritos!</h2>
+                        <h2 style="color: #ffffff; margin-bottom: 10px;">{{ __('¡Guardada en Favoritos!') }}</h2>
                         <p style="color: #9ca3af; margin-bottom: 30px;">
-                            Has añadido <strong>{{ $movie->title }}</strong> a tu lista de favoritos. ¡Tienes buen gusto!
+                            {{ __('Has añadido') }} <strong>{{ $movie->title }}</strong> {{ __('a tu lista de favoritos. ¡Tienes buen gusto!') }}
                         </p>
 
                         <table width="100%" style="background-color: #111; border-radius: 8px; padding: 15px;">
@@ -28,13 +28,13 @@
                                     {{ $movie->title }} <span style="color: #666; font-weight: normal; font-size: 12px;">({{ $movie->year }})</span>
                                 </td>
                                 <td align="right">
-                                    <a href="{{ route('user.movies.show', $movie->id) }}" style="color: #eab308; text-decoration: none; font-size: 14px;">Ver &rarr;</a>
+                                    <a href="{{ route('user.movies.show', $movie->id) }}" style="color: #eab308; text-decoration: none; font-size: 14px;">{{ __('Ver') }} &rarr;</a>
                                 </td>
                             </tr>
                         </table>
 
                         <p style="margin-top: 30px;">
-                            <a href="{{ route('user.favorites') }}" style="color: #9ca3af; text-decoration: underline; font-size: 14px;">Ver toda mi lista de favoritos</a>
+                            <a href="{{ route('user.favorites') }}" style="color: #9ca3af; text-decoration: underline; font-size: 14px;">{{ __('Ver toda mi lista de favoritos') }}</a>
                         </p>
                     </td>
                 </tr>

@@ -40,6 +40,7 @@ test('un administrador puede ver el formulario de creación', function () {
 });
 
 test('un administrador puede registrar una película con todos sus campos y relaciones', function () {
+    $this->withoutExceptionHandling();
     $director = Director::factory()->create();
     $genres = Genre::factory()->count(2)->create();
     $actors = Actor::factory()->count(2)->create();

@@ -46,6 +46,8 @@ class MovieController extends Controller
             $data['poster'] = $path;
         }
 
+        $data['score'] = 0;
+
         // 3. Crear
         $movie = Movie::create($data);
 
@@ -55,9 +57,10 @@ class MovieController extends Controller
             $movie->actors()->sync($request->actors);
         }
 
-        // Job
+        // Job evento y comando
+        MovieCreated::dispatch($movie);
         AuditLogJob::dispatch("PELÍCULA: Se ha creado la película '{$movie->title}' por " . Auth::user()->email);;
-        \Illuminate\Support\Facades\Artisan::call('movies:clean');
+        Artisan::call('movies:clean');
 
         return redirect()->route('movies.index')
             ->with('success', '¡Película creada correctamente!');
@@ -119,7 +122,6 @@ class MovieController extends Controller
         $movie->delete();
 
         AuditLogJob::dispatch("PELÍCULA: Se ha eliminado la película '$title' por " . Auth::user()->email);
-
         return redirect()->route('movies.index')->with('success', 'Película eliminada correctamente.');
     }
 }

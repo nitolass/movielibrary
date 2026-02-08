@@ -4,21 +4,21 @@
     <div class="container mx-auto px-4 py-8">
 
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-white font-['Outfit']">Historial de Visionado 👀</h1>
-            <p class="text-gray-400 text-sm mt-1">Películas que ya has marcado como vistas.</p>
+            <h1 class="text-3xl font-bold text-white font-['Outfit']">{{ __('Historial de Visionado') }} 👀</h1>
+            <p class="text-gray-400 text-sm mt-1">{{ __('Películas que ya has marcado como vistas.') }}</p>
         </div>
 
         @if(isset($movies) && count($movies) > 0)
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 @foreach($movies as $movie)
                     <div class="bg-[#16181c] rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 shadow-lg group grayscale hover:grayscale-0">
-                        {{-- CORREGIDO: Ruta al detalle --}}
+                        {{-- Ruta al detalle --}}
                         <a href="{{ route('user.movies.show', $movie) }}">
                             <div class="relative aspect-[2/3]">
                                 @if($movie->poster)
                                     <img src="{{ asset('storage/' . $movie->poster) }}" class="w-full h-full object-cover">
                                 @else
-                                    <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500">Sin img</div>
+                                    <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500">{{ __('Sin img') }}</div>
                                 @endif
 
                                 <div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-transparent transition-colors">
@@ -29,7 +29,9 @@
                             </div>
                             <div class="p-3">
                                 <h3 class="text-white font-bold truncate">{{ $movie->title }}</h3>
-                                <p class="text-gray-500 text-xs">Vista el 20/01/2024</p>
+                                <p class="text-gray-500 text-xs">
+                                    {{ __('Vista el') }} {{ $movie->pivot->created_at->format('d/m/Y') }}
+                                </p>
                             </div>
                         </a>
                     </div>
@@ -37,9 +39,10 @@
             </div>
         @else
             <div class="flex flex-col items-center justify-center h-64 border-2 border-dashed border-gray-700 rounded-xl bg-white/5">
-                <p class="text-gray-400 text-lg mb-2">Tu historial está vacío.</p>
-                {{-- CORREGIDO: Ruta al catálogo --}}
-                <a href="{{ route('user.movies.index') }}" class="text-yellow-400 hover:text-yellow-300 font-bold text-sm">Empezar a ver &rarr;</a>
+                <p class="text-gray-400 text-lg mb-2">{{ __('Tu historial está vacío.') }}</p>
+                <a href="{{ route('user.movies.index') }}" class="text-yellow-400 hover:text-yellow-300 font-bold text-sm">
+                    {{ __('Empezar a ver') }} &rarr;
+                </a>
             </div>
         @endif
     </div>

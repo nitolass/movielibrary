@@ -14,16 +14,17 @@ Route::name('api.')->group(function () {
     // --- RUTAS PÚBLICAS ---
     Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-    // Lectura pública (index y show)
-    // Se definen fuera del grupo middleware auth:sanctum
-    Route::get('/directors', [DirectorController::class, 'index']);
-    Route::get('/directors/{director}', [DirectorController::class, 'show']);
+    Route::get('/directors', [DirectorController::class, 'index'])->name('directors.index');
+    Route::get('/directors/{director}', [DirectorController::class, 'show'])->name('directors.show');
 
-    Route::get('/actors', [ActorController::class, 'index']);
-    Route::get('/actors/{actor}', [ActorController::class, 'show']);
+    Route::get('/actors', [ActorController::class, 'index'])->name('actors.index');
+    Route::get('/actors/{actor}', [ActorController::class, 'show'])->name('actors.show');
 
-    Route::get('/movies', [MovieController::class, 'index']);
-    Route::get('/movies/{movie}', [MovieController::class, 'show']);
+    Route::get('/genres', [GenreController::class, 'index'])->name('genres.index');
+    Route::get('/genres/{genre}', [GenreController::class, 'show'])->name('genres.show');
+
+    Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+    Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
 
 
     // --- RUTAS PROTEGIDAS (Requieren Token) ---
@@ -39,7 +40,7 @@ Route::name('api.')->group(function () {
         // CRUD DE USUARIOS (El controlador protege que sea solo Admin)
         Route::apiResource('users', UserController::class);
         Route::apiResource('movies', MovieController::class)->except(['index', 'show']);
-        Route::apiResource('genres', GenreController::class);
+        Route::apiResource('genres', GenreController::class)-> except(['index', 'show']);
         Route::apiResource('actors', ActorController::class)->except(['index', 'show']);
         Route::apiResource('directors', DirectorController::class)->except(['index', 'show']);
         Route::apiResource('reviews', \App\Http\Controllers\Api\ReviewController::class);

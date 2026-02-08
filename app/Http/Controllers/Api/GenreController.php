@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\GenreCreated;
 use App\Http\Controllers\Admin\Controller;
+use App\Jobs\AuditLogJob;
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Resources\GenreResource;
 
@@ -25,6 +28,9 @@ class GenreController extends Controller
         ]);
 
         $genre = Genre::create($request->all());
+        //evento
+        GenreCreated::dispatch($genre);
+
 
         return response()->json([
             'message' => 'Género creado correctamente',
@@ -48,6 +54,8 @@ class GenreController extends Controller
 
         $genre->update($request->all());
 
+
+
         return response()->json([
             'message' => 'Género actualizado',
             'data' => new GenreResource($genre)
@@ -58,6 +66,7 @@ class GenreController extends Controller
     {
         Gate::authorize('delete', $genre);
         $genre->delete();
+
         return response()->json(['message' => 'Género eliminado'], 204);
     }
 }

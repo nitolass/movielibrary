@@ -7,7 +7,7 @@ use App\Http\Requests\DirectorRequest;
 use App\Jobs\AuditLogJob;
 use App\Models\Director;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Gate; // <--- Importante
+use Illuminate\Support\Facades\Gate;
 
 class DirectorController extends Controller
 {
@@ -29,14 +29,14 @@ class DirectorController extends Controller
         Gate::authorize('create', Director::class);
         $data = $request->validated();
 
-        DirectorCreated::dispatch($data);
 
         if($request->hasFile('photo')){
             $data['photo'] = $request->file('photo')->store('directors','public');
         }
 
         $director = Director::create($data);
-        //Job
+        //Job y event
+        DirectorCreated::dispatch($director);
         AuditLogJob::dispatch("DIRECTOR: Se ha creado el director '{$director->name}'");
         return redirect()->route('directors.index')->with('success', 'Director creado correctamente');
     }

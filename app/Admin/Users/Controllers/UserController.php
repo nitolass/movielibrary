@@ -3,6 +3,7 @@
 namespace App\Admin\Users\Controllers;
 
 use App\Admin\Users\Requests\UserStoreRequest;
+use App\Events\UserCreated;
 use App\Http\Controllers\Admin\Controller;
 use App\Jobs\AuditLogJob;
 use App\Models\User;
@@ -11,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Illuminate\Support\Facades\Gate; // <--- Importante
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -53,7 +54,7 @@ class UserController extends Controller
         ]);
 
         AuditLogJob::dispatch("USUARIOS: Admin " . Auth::user()->email . " creó al usuario '{$user->email}'");
-
+        UserCreated::dispatch($user);
         // 3. Redirigir
         return redirect()->route('admin.users.index')
             ->with('success', 'Usuario creado correctamente');

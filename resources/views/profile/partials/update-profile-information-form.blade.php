@@ -31,7 +31,7 @@
                           class="mt-2 block w-full bg-gray-800/50 border-gray-700 text-gray-100 focus:border-yellow-400 focus:ring-yellow-400 rounded-xl py-3 px-4 shadow-inner placeholder-gray-500 transition-all"
                           :value="old('name', $user->name)"
                           required autofocus autocomplete="name"
-                          placeholder="Tu nombre público" />
+                          placeholder="{{ __('Tu nombre público') }}" />
             <x-input-error class="mt-2 text-red-400 font-medium" :messages="$errors->get('name')" />
         </div>
 
@@ -41,7 +41,7 @@
                           class="mt-2 block w-full bg-gray-800/50 border-gray-700 text-gray-100 focus:border-yellow-400 focus:ring-yellow-400 rounded-xl py-3 px-4 shadow-inner placeholder-gray-500 transition-all"
                           :value="old('email', $user->email)"
                           required autocomplete="username"
-                          placeholder="ejemplo@correo.com" />
+                          placeholder="{{ __('ejemplo@moviehub.com') }}" />
             <x-input-error class="mt-2 text-red-400 font-medium" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())

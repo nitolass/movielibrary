@@ -14,17 +14,17 @@
                             <span style="font-size: 30px;">🔒</span>
                         </div>
 
-                        <h2 style="color: #ffffff; margin-bottom: 15px;">Verifica tu correo</h2>
+                        <h2 style="color: #ffffff; margin-bottom: 15px;">{{ __('Verifica tu correo') }}</h2>
                         <p style="color: #9ca3af; line-height: 1.6; margin-bottom: 30px;">
-                            Hola {{ $user->name }}, necesitamos confirmar que este correo es tuyo para asegurar tu cuenta.
+                            {{ __('Hola') }} {{ $user->name }}, {{ __('necesitamos confirmar que este correo es tuyo para asegurar tu cuenta.') }}
                         </p>
 
                         <a href="#" style="background-color: #eab308; color: #000000; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">
-                            Confirmar mi cuenta
+                            {{ __('Confirmar mi cuenta') }}
                         </a>
 
                         <p style="color: #555; font-size: 12px; margin-top: 30px;">
-                            Si no creaste una cuenta, puedes ignorar este mensaje.
+                            {{ __('Si no creaste una cuenta, puedes ignorar este mensaje.') }}
                         </p>
                     </td>
                 </tr>

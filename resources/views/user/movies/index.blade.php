@@ -7,8 +7,8 @@
         <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
             {{-- Título --}}
             <div>
-                <h1 class="text-3xl font-bold text-white font-['Outfit']">Catálogo <span class="text-yellow-400">MovieHub</span></h1>
-                <p class="text-gray-400 text-sm mt-1">Explora las últimas películas añadidas a la plataforma.</p>
+                <h1 class="text-3xl font-bold text-white font-['Outfit']">{{ __('Catálogo') }} <span class="text-yellow-400">MovieHub</span></h1>
+                <p class="text-gray-400 text-sm mt-1">{{ __('Explora las últimas películas añadidas a la plataforma.') }}</p>
             </div>
 
             {{-- GRUPO DE BOTONES (ORDENAR Y FILTRAR) --}}
@@ -25,7 +25,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                     </svg>
-                    <span>Recientes</span>
+                    <span>{{ __('Recientes') }}</span>
                 </a>
 
                 {{-- 2. BOTÓN DE FILTRAR (EXISTENTE) --}}
@@ -36,7 +36,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity">
                             <path fill-rule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clip-rule="evenodd" />
                         </svg>
-                        <span>Filtrar</span>
+                        <span>{{ __('Filtrar') }}</span>
 
                         {{-- Contador --}}
                         @if(request()->has('genres'))
@@ -68,7 +68,7 @@
                             @endif
 
                             <div class="mb-3 text-xs font-bold text-gray-500 uppercase tracking-widest border-b border-white/5 pb-2">
-                                Géneros
+                                {{ __('Géneros') }}
                             </div>
 
                             {{-- Lista de Checkboxes --}}
@@ -88,11 +88,11 @@
                                 <button type="button"
                                         @click="$el.closest('form').querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false)"
                                         class="text-xs text-gray-500 hover:text-white underline transition-colors">
-                                    Limpiar
+                                    {{ __('Limpiar') }}
                                 </button>
 
                                 <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-black text-xs font-bold py-2 px-4 rounded-lg transition-colors shadow-lg shadow-yellow-400/20">
-                                    Aplicar
+                                    {{ __('Aplicar') }}
                                 </button>
                             </div>
                         </form>
@@ -113,13 +113,13 @@
                                     <img src="{{ asset('storage/' . $movie->poster) }}" class="w-full h-full object-cover" alt="{{ $movie->title }}">
                                 @else
                                     <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500 font-bold">
-                                        <span class="text-xs">Sin Imagen</span>
+                                        <span class="text-xs">{{ __('Sin Imagen') }}</span>
                                     </div>
                                 @endif
 
                                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                     <span class="text-white font-bold border border-white px-4 py-2 rounded-full transform scale-90 group-hover:scale-100 transition-transform text-sm">
-                                        Ver Detalles
+                                        {{ __('Ver Detalles') }}
                                     </span>
                                 </div>
                             </div>
@@ -155,11 +155,11 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-2">No se encontraron películas</h3>
-                <p class="text-gray-400">Intenta ajustar tus filtros o búsqueda.</p>
+                <h3 class="text-xl font-bold text-white mb-2">{{ __('No se encontraron películas') }}</h3>
+                <p class="text-gray-400">{{ __('Intenta ajustar tus filtros o búsqueda.') }}</p>
                 @if(request('genres') || request('search') || request('sort'))
                     <a href="{{ route('user.movies.index') }}" class="mt-4 text-yellow-400 hover:text-yellow-300 text-sm font-bold underline">
-                        Borrar filtros
+                        {{ __('Borrar filtros') }}
                     </a>
                 @endif
             </div>

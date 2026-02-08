@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-['Outfit'] font-black text-3xl text-white leading-tight drop-shadow-md">
-            Gestión de <span class="text-yellow-400">Perfil</span>
+            {{ __('Gestión de') }} <span class="text-yellow-400">{{ __('Perfil') }}</span>
         </h2>
     </x-slot>
 

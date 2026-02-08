@@ -4,8 +4,8 @@
     <div class="container mx-auto px-4 py-8">
 
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-white font-['Outfit']">Mis Favoritos ❤️</h1>
-            <p class="text-gray-400 text-sm mt-1">Las películas que más te gustan están aquí.</p>
+            <h1 class="text-3xl font-bold text-white font-['Outfit']">{{ __('Mis Favoritos') }} ❤️</h1>
+            <p class="text-gray-400 text-sm mt-1">{{ __('Las películas que más te gustan están aquí.') }}</p>
         </div>
 
         @if($movies && count($movies) > 0)
@@ -19,12 +19,12 @@
                                 @if($movie->poster)
                                     <img src="{{ asset('storage/' . $movie->poster) }}" class="w-full h-full object-cover">
                                 @else
-                                    <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500">Sin img</div>
+                                    <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500">{{ __('Sin img') }}</div>
                                 @endif
 
                                 {{-- Hover: Ver Ficha --}}
                                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <span class="text-white font-bold border border-white px-4 py-2 rounded-full">Ver Ficha</span>
+                                    <span class="text-white font-bold border border-white px-4 py-2 rounded-full">{{ __('Ver Ficha') }}</span>
                                 </div>
                             </div>
 
@@ -40,8 +40,10 @@
             </div>
         @else
             <div class="flex flex-col items-center justify-center h-64 border-2 border-dashed border-gray-700 rounded-xl bg-white/5">
-                <p class="text-gray-400 text-lg mb-2">No tienes favoritos aún.</p>
-                <a href="{{ route('user.movies.index') }}" class="text-yellow-400 hover:text-yellow-300 font-bold text-sm">Explorar catálogo &rarr;</a>
+                <p class="text-gray-400 text-lg mb-2">{{ __('No tienes favoritos aún.') }}</p>
+                <a href="{{ route('user.movies.index') }}" class="text-yellow-400 hover:text-yellow-300 font-bold text-sm">
+                    {{ __('Explorar catálogo') }} &rarr;
+                </a>
             </div>
         @endif
     </div>

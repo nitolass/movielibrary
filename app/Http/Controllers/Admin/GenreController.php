@@ -32,11 +32,11 @@ class GenreController extends Controller
         Gate::authorize('create', Genre::class);
         $genre = Genre::create($request->validated());
 
-        //Job
-        RecalculateMovieRating::dispatch();
+
         //Comando
         Artisan::call('movies:stats');
-        //Job
+        //Job y event
+        GenreCreated::dispatch($genre);
         AuditLogJob::dispatch("GÉNERO: El usuario " . Auth::user()->email . " creó el género '{$genre->name}'");
         return redirect()->route('admin.genres.index');
     }

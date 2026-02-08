@@ -12,9 +12,9 @@
                     <td style="padding: 40px; text-align: center;">
                         <h1 style="font-size: 40px; margin: 0 0 20px 0;">🕒</h1>
 
-                        <h2 style="color: #ffffff; margin-bottom: 10px;">¡Guardada para después!</h2>
+                        <h2 style="color: #ffffff; margin-bottom: 10px;">{{ __('¡Guardada para después!') }}</h2>
                         <p style="color: #9ca3af; margin-bottom: 30px;">
-                            No te preocupes, <strong>{{ $movie->title }}</strong> estará esperándote cuando tengas tiempo.
+                            {{ __('No te preocupes,') }} <strong>{{ $movie->title }}</strong> {{ __('estará esperándote cuando tengas tiempo.') }}
                         </p>
 
                         <div style="background-color: #1f2937; padding: 20px; border-radius: 8px; border-left: 3px solid #eab308; text-align: left;">
@@ -25,7 +25,7 @@
                         </div>
 
                         <p style="margin-top: 30px;">
-                            <a href="{{ route('user.watch_later') }}" style="background-color: #333; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-size: 14px;">Ir a mi lista pendiente</a>
+                            <a href="{{ route('user.watch_later') }}" style="background-color: #333; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-size: 14px;">{{ __('Ir a mi lista pendiente') }}</a>
                         </p>
                     </td>
                 </tr>

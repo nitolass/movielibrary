@@ -14,49 +14,49 @@
                         MovieHub<span class="text-yellow-400">.</span>
                     </h1>
                 </a>
-                <h2 class="text-lg font-bold text-gray-200">Crea tu cuenta</h2>
-                <p class="text-gray-500 text-xs mt-1">Empieza a coleccionar cine hoy mismo</p>
+                <h2 class="text-lg font-bold text-gray-200">{{ __('Crea tu cuenta') }}</h2>
+                <p class="text-gray-500 text-xs mt-1">{{ __('Empieza a coleccionar cine hoy mismo') }}</p>
             </div>
 
             <form method="POST" action="{{ route('register') }}" class="space-y-5">
                 @csrf
 
                 <div>
-                    <label for="name" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Nombre Completo</label>
+                    <label for="name" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">{{ __('Nombre Completo') }}</label>
                     <div class="relative group">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-yellow-400 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </div>
-                        <input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Tu Nombre"
+                        <input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="{{ __('Tu Nombre') }}"
                                class="block w-full pl-12 pr-4 py-3 bg-[#0f1115] border border-gray-700 text-gray-100 rounded-xl focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 focus:outline-none transition-all placeholder-gray-600 shadow-inner sm:text-sm">
                     </div>
                     <x-input-error :messages="$errors->get('name')" class="mt-2 text-red-400 text-xs font-bold" />
                 </div>
 
                 <div>
-                    <label for="surname" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Apellido</label>
+                    <label for="surname" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">{{ __('Apellidos') }}</label>
                     <div class="relative group">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-yellow-400 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0c0 .884-.956 2.5-1 2.5H15c-.044 0-1-1.616-1-2.5" />
                             </svg>
                         </div>
-                        <input id="surname" type="text" name="surname" :value="old('surname')" required autocomplete="family-name" placeholder="Tu Apellido"
+                        <input id="surname" type="text" name="surname" :value="old('surname')" required autocomplete="family-name" placeholder="{{ __('Tu Apellido') }}"
                                class="block w-full pl-12 pr-4 py-3 bg-[#0f1115] border border-gray-700 text-gray-100 rounded-xl focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 focus:outline-none transition-all placeholder-gray-600 shadow-inner sm:text-sm">
                     </div>
                     <x-input-error :messages="$errors->get('surname')" class="mt-2 text-red-400 text-xs font-bold" />
                 </div>
                 <div>
-                    <label for="email" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Correo Electrónico</label>
+                    <label for="email" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">{{ __('Correo Electrónico') }}</label>
                     <div class="relative group">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-yellow-400 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                             </svg>
                         </div>
-                        <input id="email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="ejemplo@moviehub.com"
+                        <input id="email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="{{ __('ejemplo@moviehub.com') }}"
                                class="block w-full pl-12 pr-4 py-3 bg-[#0f1115] border border-gray-700 text-gray-100 rounded-xl focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 focus:outline-none transition-all placeholder-gray-600 shadow-inner sm:text-sm">
                     </div>
                     <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-400 text-xs font-bold" />
@@ -65,7 +65,7 @@
                 <div x-data="{ show: false }" class="space-y-5">
 
                     <div>
-                        <label for="password" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Contraseña</label>
+                        <label for="password" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">{{ __('Contraseña') }}</label>
                         <div class="relative group">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-yellow-400 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -85,7 +85,7 @@
                     </div>
 
                     <div>
-                        <label for="password_confirmation" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Confirmar Contraseña</label>
+                        <label for="password_confirmation" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">{{ __('Confirmar Contraseña') }}</label>
                         <div class="relative group">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-yellow-400 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,7 +93,7 @@
                                 </svg>
                             </div>
 
-                            <input id="password_confirmation" :type="show ? 'text' : 'password'" name="password_confirmation" required autocomplete="new-password" placeholder="Repite tu contraseña"
+                            <input id="password_confirmation" :type="show ? 'text' : 'password'" name="password_confirmation" required autocomplete="new-password" placeholder="{{ __('Repite tu contraseña') }}"
                                    class="block w-full pl-12 pr-4 py-3 bg-[#0f1115] border border-gray-700 text-gray-100 rounded-xl focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 focus:outline-none transition-all placeholder-gray-600 shadow-inner sm:text-sm">
                         </div>
                         <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2 text-red-400 text-xs font-bold" />
@@ -104,7 +104,7 @@
                     <button type="submit" class="group relative w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl text-sm font-black text-black bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-300 hover:to-yellow-400 shadow-lg hover:shadow-yellow-400/50 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all duration-300 uppercase tracking-widest overflow-hidden">
                         <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out"></span>
                         <span class="relative flex items-center gap-2 z-10">
-                            Registrarse
+                            {{ __('Registrarse') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>
@@ -115,9 +115,9 @@
 
             <div class="mt-6 pt-6 border-t border-white/5 text-center">
                 <p class="text-gray-500 text-xs">
-                    ¿Ya tienes cuenta?
+                    {{ __('¿Ya tienes cuenta?') }}
                     <a href="{{ route('login') }}" class="text-yellow-400 font-bold hover:text-yellow-300 hover:underline transition-all">
-                        Inicia sesión aquí
+                        {{ __('Inicia sesión aquí') }}
                     </a>
                 </p>
             </div>

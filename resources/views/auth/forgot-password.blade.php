@@ -23,7 +23,7 @@
                     </div>
                 </div>
 
-                <h2 class="text-xl font-bold text-white">¿Olvidaste tu contraseña?</h2>
+                <h2 class="text-xl font-bold text-white">{{ __('¿Olvidaste tu contraseña?') }}</h2>
                 <p class="text-sm text-gray-400 mt-2 leading-relaxed">
                     {{ __('No te preocupes. Indícanos tu email y te enviaremos un enlace para que puedas crear una nueva.') }}
                 </p>
@@ -35,14 +35,14 @@
                 @csrf
 
                 <div>
-                    <label for="email" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Correo Electrónico</label>
+                    <label for="email" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">{{ __('Correo Electrónico') }}</label>
                     <div class="relative group">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-yellow-400 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                             </svg>
                         </div>
-                        <input id="email" type="email" name="email" :value="old('email')" required autofocus placeholder="tu@email.com"
+                        <input id="email" type="email" name="email" :value="old('email')" required autofocus placeholder="{{ __('tu@email.com') }}"
                                class="block w-full pl-12 pr-4 py-3 bg-[#0f1115] border border-gray-700 text-gray-100 rounded-xl focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 focus:outline-none transition-all placeholder-gray-600 shadow-inner sm:text-sm">
                     </div>
                     <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-400 text-xs font-bold" />
@@ -64,7 +64,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Volver a iniciar sesión
+                    {{ __('Volver a iniciar sesión') }}
                 </a>
             </div>
 

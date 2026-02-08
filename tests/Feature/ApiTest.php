@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 test('cobertura de rutas api publicas y protegidas', function () {
+    $this->withoutExceptionHandling();
     // 1. Preparar datos necesarios
     $director = Director::factory()->create();
     $movie = Movie::factory()->create(['director_id' => $director->id]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\DirectorCreated;
 use App\Http\Controllers\Admin\Controller;
 use App\Jobs\AuditLogJob;
 use App\Models\Director;
@@ -13,13 +14,11 @@ class DirectorController extends Controller
 {
     public function index()
     {
-        Gate::authorize('viewAny', Director::class);
         return DirectorResource::collection(Director::all());
     }
 
     public function show(Director $director)
     {
-        Gate::authorize('view', $director);
         return new DirectorResource($director);
     }
 
@@ -30,6 +29,8 @@ class DirectorController extends Controller
         $validated = $request->validate(['name' => 'required|string|max:255']);
         $director = Director::create($validated);
 
+        //Job y Event
+        DirectorCreated::dispatch($director);
         AuditLogJob::dispatch("API: Director '{$director->name}' creado por " . $request->user()->email);
 
         return new DirectorResource($director);

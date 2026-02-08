@@ -19,11 +19,8 @@
 
 <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
     <div class="absolute inset-0 opacity-[0.02]" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
-
     <div class="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-yellow-500/5 blur-[150px] mix-blend-screen"></div>
-
     <div class="absolute -bottom-[40%] -right-[20%] w-[80%] h-[80%] rounded-full bg-indigo-900/10 blur-[150px] mix-blend-screen"></div>
-
     <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(15,17,21,0.8)_100%)]"></div>
 </div>
 

@@ -26,7 +26,7 @@
             </div>
 
             <div class="mb-6 text-center">
-                <h2 class="text-lg font-bold text-white mb-2">Verifica tu correo electrónico</h2>
+                <h2 class="text-lg font-bold text-white mb-2">{{ __('Verifica tu correo electrónico') }}</h2>
                 <p class="text-sm text-gray-400 leading-relaxed">
                     {{ __('Gracias por registrarte. Antes de empezar a coleccionar cine, ¿podrías verificar tu dirección haciendo clic en el enlace que te acabamos de enviar?') }}
                 </p>
@@ -43,7 +43,7 @@
                         </svg>
                         <span>{{ __('Enlace enviado correctamente.') }}</span>
                     </div>
-                    <p class="text-xs text-green-300/70 mt-1">Revisa tu bandeja de entrada o spam.</p>
+                    <p class="text-xs text-green-300/70 mt-1">{{ __('Revisa tu bandeja de entrada o spam.') }}</p>
                 </div>
             @endif
 

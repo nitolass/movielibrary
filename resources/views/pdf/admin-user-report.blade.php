@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Informe de Usuario</title>
+    <title>{{ __('Informe de Usuario') }}</title>
     <style>
         body { font-family: 'Helvetica', sans-serif; color: #333; padding: 20px; }
 
@@ -31,51 +31,50 @@
 
 <div class="header">
     <div class="meta">
-        ID Informe: #USR-{{ $user->id }}-{{ date('Y') }}<br>
-        Fecha: {{ date('d/m/Y H:i') }}
+        {{ __('ID Informe') }}: #USR-{{ $user->id }}-{{ date('Y') }}<br>
+        {{ __('Fecha') }}: {{ date('d/m/Y H:i') }}
     </div>
     <div class="logo">Movie<span>Hub</span> Admin</div>
 </div>
 
-<div class="section-title">Datos del Usuario</div>
+<div class="section-title">{{ __('Datos del Usuario') }}</div>
 
 <table class="info-grid">
     <tr>
         <td width="50%">
-            <div class="label">Nombre Completo</div>
+            <div class="label">{{ __('Nombre Completo') }}</div>
             <div class="value">{{ $user->name }} {{ $user->surname }}</div>
         </td>
         <td width="50%">
-            <div class="label">Correo Electrónico</div>
+            <div class="label">{{ __('Correo Electrónico') }}</div>
             <div class="value">{{ $user->email }}</div>
         </td>
     </tr>
     <tr>
         <td>
-            <div class="label">Estado de cuenta</div>
-            <div class="value" style="color: green;">Activo</div>
+            <div class="label">{{ __('Estado de cuenta') }}</div>
+            <div class="value" style="color: green;">{{ __('Activo') }}</div>
         </td>
         <td>
-            <div class="label">Miembro desde</div>
+            <div class="label">{{ __('Miembro desde') }}</div>
             <div class="value">{{ $user->created_at->isoFormat('LL') }}</div>
         </td>
     </tr>
 </table>
 
-<div class="section-title">Películas Pendientes (Watch Later)</div>
+<div class="section-title">{{ __('Películas Pendientes') }} (Watch Later)</div>
 
 @if($user->watchLater->count() > 0)
     <table class="activity-table">
         <thead>
         <tr>
-            <th>Película</th>
-            <th>Año</th>
-            <th>Director</th>
-            <th>Agregada el</th>
+            <th>{{ __('Película') }}</th>
+            <th>{{ __('Año') }}</th>
+            <th>{{ __('Director') }}</th>
+            <th>{{ __('Agregada el') }}</th>
         </tr>
         </thead>
         <tbody>
-        {{-- AQUÍ ESTÁ EL BUCLE FOREACH --}}
         @foreach($user->watchLater as $movie)
             <tr>
                 <td>{{ $movie->title }}</td>
@@ -88,12 +87,12 @@
     </table>
 @else
     <p style="color: #666; font-style: italic; padding: 20px; background: #f9f9f9; border-radius: 5px;">
-        Este usuario no tiene películas en su lista de pendientes actualmente.
+        {{ __('Este usuario no tiene películas en su lista de pendientes actualmente.') }}
     </p>
 @endif
 
 <div class="footer">
-    Documento generado automáticamente por el sistema de administración de MovieHub.
+    {{ __('Documento generado automáticamente por el sistema de administración de MovieHub.') }}
 </div>
 
 </body>

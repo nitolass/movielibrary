@@ -4,21 +4,21 @@
     <div class="container mx-auto px-4 py-8">
 
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-white font-['Outfit']">Ver más tarde 🕒</h1>
-            <p class="text-gray-400 text-sm mt-1">Tu lista de pendientes para el fin de semana.</p>
+            <h1 class="text-3xl font-bold text-white font-['Outfit']">{{ __('Ver más tarde') }} 🕒</h1>
+            <p class="text-gray-400 text-sm mt-1">{{ __('Tu lista de pendientes para el fin de semana.') }}</p>
         </div>
 
         @if(isset($movies) && count($movies) > 0)
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 @foreach($movies as $movie)
                     <div class="bg-[#16181c] rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 shadow-lg group">
-                        {{-- CORREGIDO: Apunta al detalle de la película --}}
+                        {{-- Ruta al detalle --}}
                         <a href="{{ route('user.movies.show', $movie) }}">
                             <div class="relative aspect-[2/3]">
                                 @if($movie->poster)
                                     <img src="{{ asset('storage/' . $movie->poster) }}" class="w-full h-full object-cover">
                                 @else
-                                    <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500">Sin img</div>
+                                    <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500">{{ __('Sin img') }}</div>
                                 @endif
                             </div>
                             <div class="p-3">
@@ -31,9 +31,11 @@
             </div>
         @else
             <div class="flex flex-col items-center justify-center h-64 border-2 border-dashed border-gray-700 rounded-xl bg-white/5">
-                <p class="text-gray-400 text-lg mb-2">¡Estás al día! No tienes pendientes.</p>
+                <p class="text-gray-400 text-lg mb-2">{{ __('¡Estás al día! No tienes pendientes.') }}</p>
 
-                <a href="{{ route('user.movies.index') }}" class="text-yellow-400 hover:text-yellow-300 font-bold text-sm">Buscar algo nuevo &rarr;</a>
+                <a href="{{ route('user.movies.index') }}" class="text-yellow-400 hover:text-yellow-300 font-bold text-sm">
+                    {{ __('Buscar algo nuevo') }} &rarr;
+                </a>
             </div>
         @endif
     </div>
