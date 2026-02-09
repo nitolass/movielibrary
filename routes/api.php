@@ -13,6 +13,7 @@ Route::name('api.')->group(function () {
 
     // --- RUTAS PÚBLICAS ---
     Route::post('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
 
     Route::get('/directors', [DirectorController::class, 'index'])->name('directors.index');
     Route::get('/directors/{director}', [DirectorController::class, 'show'])->name('directors.show');

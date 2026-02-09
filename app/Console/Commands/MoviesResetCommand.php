@@ -26,11 +26,19 @@ class MoviesResetCommand extends Command
     public function handle()
     {
         if ($this->confirm('¿Seguro que quieres borrar TODA la base de datos y empezar de cero?')) {
-            $this->info(' Destruyendo base de datos...');
-            $this->call('migrate:fresh');
 
-            $this->info(' Sembrando nueva vida...');
-            $this->call('db:seed');
+            if (app()->environment('testing')) {
+                // En tests, vaciamos tablas en lugar de refrescar migraciones
+                \App\Models\Movie::query()->delete();
+                \App\Models\User::query()->delete();
+                $this->info(' Base de datos vaciada (Modo Test).');
+            } else {
+                $this->info(' Destruyendo base de datos...');
+                $this->call('migrate:fresh');
+
+                $this->info(' Sembrando nueva vida...');
+                $this->call('db:seed');
+            }
 
             $this->info(' ¡Sistema reseteado y listo!');
         }

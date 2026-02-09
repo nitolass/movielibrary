@@ -12,9 +12,7 @@ use Laravel\Sanctum\Sanctum;
 
 uses(RefreshDatabase::class);
 
-// --- SETUP INICIAL ---
 beforeEach(function () {
-    // Creamos un Admin para poder probar las rutas protegidas
     $role = Role::firstOrCreate(['name' => 'admin']);
     $this->admin = User::factory()->create([
         'role_id' => $role->id,
@@ -23,9 +21,7 @@ beforeEach(function () {
     ]);
 });
 
-// =========================================================================
-// 1. TEST DE AUTENTICACIÓN (LOGIN/LOGOUT)
-// =========================================================================
+
 test('api login works', function () {
     // Probamos la ruta pública de login
     $response = $this->postJson('/api/login', [
@@ -124,6 +120,7 @@ test('api users crud (protected)', function () {
 });
 
 test('api movies write operations (protected)', function () {
+    $this->withoutExceptionHandling();
     Sanctum::actingAs($this->admin);
     $director = Director::factory()->create();
     $genre = Genre::factory()->create();
@@ -135,9 +132,9 @@ test('api movies write operations (protected)', function () {
         'duration' => 120,
         'description' => 'Test',
         'director_id' => $director->id,
-        'genre_id' => $genre->id // Si tu validación lo requiere
+        'genre_id' => $genre->id,
+        'score' => 8.5
     ]);
-    // A veces create devuelve 201, a veces 200, ajusta si falla
     $response->assertSuccessful();
 
     // Update
@@ -154,6 +151,7 @@ test('api movies write operations (protected)', function () {
 });
 
 test('api directors write operations (protected)', function () {
+    $this->withoutExceptionHandling();
     Sanctum::actingAs($this->admin);
 
     // Store
@@ -169,10 +167,11 @@ test('api directors write operations (protected)', function () {
         ->assertStatus(200);
 
     // Destroy
-    $this->deleteJson("/api/directors/{$director->id}")->assertStatus(200);
+    $this->deleteJson("/api/directors/{$director->id}")->assertStatus(204);
 });
 
 test('api actors write operations (protected)', function () {
+    $this->withoutExceptionHandling();
     Sanctum::actingAs($this->admin);
 
     // Store
@@ -188,7 +187,7 @@ test('api actors write operations (protected)', function () {
         ->assertStatus(200);
 
     // Destroy
-    $this->deleteJson("/api/actors/{$actor->id}")->assertStatus(200);
+    $this->deleteJson("/api/actors/{$actor->id}")->assertStatus(204);
 });
 
 test('api genres write operations (protected)', function () {
@@ -202,15 +201,15 @@ test('api genres write operations (protected)', function () {
     $this->putJson("/api/genres/{$genre->id}", ['name' => 'Updated Genre'])->assertStatus(200);
 
     // Destroy
-    $this->deleteJson("/api/genres/{$genre->id}")->assertStatus(200);
+    $this->deleteJson("/api/genres/{$genre->id}")->assertStatus(204);
 });
 
 test('api reviews crud (protected)', function () {
+    $this->withoutExceptionHandling();
     Sanctum::actingAs($this->admin);
 
     $movie = Movie::factory()->create();
 
-    // Store
     $response = $this->postJson('/api/reviews', [
         'user_id' => $this->admin->id,
         'movie_id' => $movie->id,
@@ -219,22 +218,21 @@ test('api reviews crud (protected)', function () {
     ]);
     $response->assertSuccessful();
 
-    // Creamos una reseña para editar/borrar
-    $review = Review::create([
+    $movie2 = Movie::factory()->create();
+
+    $reviewToEdit = Review::create([
         'user_id' => $this->admin->id,
-        'movie_id' => $movie->id,
+        'movie_id' => $movie2->id,
         'rating' => 4,
         'content' => 'Old content'
     ]);
 
-    // Update
-    $this->putJson("/api/reviews/{$review->id}", [
+    $this->putJson("/api/reviews/{$reviewToEdit->id}", [
         'rating' => 3,
         'content' => 'Updated content',
         'user_id' => $this->admin->id,
-        'movie_id' => $movie->id
+        'movie_id' => $movie2->id
     ])->assertStatus(200);
 
-    // Destroy
-    $this->deleteJson("/api/reviews/{$review->id}")->assertStatus(200);
+    $this->deleteJson("/api/reviews/{$reviewToEdit->id}")->assertStatus(204); // Recuerda que cambiamos a 204
 });

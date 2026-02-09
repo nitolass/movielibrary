@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Genre;
+use App\Http\Requests\CatalogFilterRequest;
 
 class PublicCatalogController extends Controller
 {
-    public function catalogo(Request $request)
+    public function catalogo(CatalogFilterRequest $request)
     {
+        $filters = $request->validated();
         // 1. Iniciamos la consulta cargando relaciones para evitar N+1
         $query = Movie::with(['director', 'genres']);
 

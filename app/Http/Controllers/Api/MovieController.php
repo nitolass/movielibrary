@@ -20,6 +20,9 @@ class MovieController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'year' => 'required|integer',
+            'description' => 'required|string',
+            'duration' => 'required|integer',
+            'score' => 'required|numeric',
             'director_id' => 'required|exists:directors,id',
             'poster' => 'nullable|image'
         ]);

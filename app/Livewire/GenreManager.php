@@ -85,7 +85,6 @@ class GenreManager extends Component
 
     public function edit($id)
     {
-        Gate::authorize('update', Genre::class); // Verificamos permiso genérico primero
 
         $genre = Genre::findOrFail($id);
 

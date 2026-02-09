@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Admin\Users\Requests\UserStoreRequest;
 use App\Http\Controllers\Admin\Controller;
 use App\Jobs\AuditLogJob;
 use App\Models\User;
@@ -23,19 +24,12 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
         // Policy: create (Solo Admin)
         Gate::authorize('create', User::class);
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-            'role_id' => 'required|exists:roles,id'
-        ]);
-
+        $validated = $request->validated();
         $validated['password'] = Hash::make($validated['password']);
 
         $user = User::create($validated);

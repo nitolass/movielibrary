@@ -30,18 +30,12 @@ class UserController extends Controller
         return view('admin.users.create', compact('roles'));
     }
 
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
         Gate::authorize('create', User::class);
 
         // Validar
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'surname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', 'min:8'],
-            'role_id' => ['required', 'exists:roles,id'],
-        ]);
+        $request->validated();
 
         // Crear
         $user = User::create([
